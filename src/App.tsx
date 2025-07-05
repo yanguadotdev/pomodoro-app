@@ -19,7 +19,7 @@ const PomodoroApp: React.FC = () => {
   const [focusTitle, setFocusTitle] = useState('');
   const [rainEnabled, setRainEnabled] = useState(true);
   
-  const { rainDrops } = useRainEffect(rainEnabled);
+  const { rainDrops } = useRainEffect(rainEnabled, 'storm');
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -37,7 +37,7 @@ const PomodoroApp: React.FC = () => {
           {rainDrops.map(drop => (
             <div
               key={drop.id}
-              className="absolute w-0.5 bg-gradient-to-b from-transparent via-blue-200 to-transparent"
+              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200 to-transparent"
               style={{
                 left: `${drop.left}%`,
                 height: `${drop.height}px`,
