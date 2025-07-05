@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Play, Pause, RotateCcw, Settings, X, CloudRain } from 'lucide-react'
-import type { RainDrop } from './types'
 import ClockAnimation from './components/ClockAnimation';
 import { useTimer } from './hooks/useTimer';
+import { useRainEffect } from './hooks/useRainEffect';
 
 const PomodoroApp: React.FC = () => {
   const {
@@ -18,40 +18,8 @@ const PomodoroApp: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [focusTitle, setFocusTitle] = useState('');
   const [rainEnabled, setRainEnabled] = useState(true);
-  const [rainDrops, setRainDrops] = useState<RainDrop[]>([]);
-  const rainIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  // Rain effect
-  useEffect(() => {
-    if (rainEnabled) {
-      rainIntervalRef.current = setInterval(() => {
-        createRainDrop();
-      }, 150);
-    } else {
-      if (rainIntervalRef.current) clearInterval(rainIntervalRef.current);
-      setRainDrops([]);
-    }
-
-    return () => {
-      if (rainIntervalRef.current) clearInterval(rainIntervalRef.current);
-    };
-  }, [rainEnabled]);
-
-  const createRainDrop = () => {
-    const newDrop: RainDrop = {
-      id: Date.now() + Math.random(),
-      left: Math.random() * 100,
-      animationDuration: Math.random() * 2 + 1.5,
-      opacity: Math.random() * 0.6 + 0.2,
-      height: Math.random() * 80 + 40
-    };
-
-    setRainDrops(prev => [...prev, newDrop]);
-
-    setTimeout(() => {
-      setRainDrops(prev => prev.filter(drop => drop.id !== newDrop.id));
-    }, newDrop.animationDuration * 1000);
-  };
+  
+  const { rainDrops } = useRainEffect(rainEnabled);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
