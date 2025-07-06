@@ -1,37 +1,149 @@
-import React, { useState } from 'react'
-import { Play, Pause, RotateCcw, Settings, X, CloudRain } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
+import { CloudRain } from 'lucide-react'
+import { useRainEffect } from './hooks/useRainEffect';
+import type { PomodoroSettings } from './types';
 import ClockAnimation from './components/ClockAnimation';
 import { useTimer } from './hooks/useTimer';
-import { useRainEffect } from './hooks/useRainEffect';
 
 const PomodoroApp: React.FC = () => {
-  const {
-    timer,
-    modes,
-    progress,
-    toggleTimer,
-    resetTimer,
-    switchMode,
-    formatTime
-  } = useTimer();
+  const { timer, setTimer, settings, calculateSessionDuration, toggleTimer, resetTimer } = useTimer();
 
   const [showSettings, setShowSettings] = useState(false);
-  const [focusTitle, setFocusTitle] = useState('');
+  const [tempSettings, setTempSettings] = useState<PomodoroSettings>(settings);
   const [rainEnabled, setRainEnabled] = useState(true);
-  
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const playNotificationSound = () => {
+    if (settings.soundEnabled) {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+  };
+
   const { rainDrops } = useRainEffect(rainEnabled, 'storm');
+
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+  const updatePageTitle = (seconds: number, isBreak: boolean, isRunning: boolean) => {
+    if (isRunning) {
+      const timeStr = formatTime(seconds);
+      const mode = isBreak ? 'Descanso' : 'Estudio';
+      document.title = `${timeStr} - ${mode} | Pomodoro Timer`;
+    } else {
+      document.title = 'Pomodoro Timer';
+    }
+  };
+
+  useEffect(() => {
+    updatePageTitle(timer.currentSeconds, timer.isBreak, timer.isRunning);
+  }, [timer.currentSeconds, timer.isBreak, timer.isRunning]);
+
+  useEffect(() => {
+    return () => {
+      document.title = 'Pomodoro Timer';
+    };
+  }, []);
+
+
+  // ===================================================================================
+  useEffect(() => {
+    if (timer.isRunning && !timer.isCompleted) {
+      intervalRef.current = setInterval(() => {
+        setTimer(prev => {
+          if (prev.currentSeconds <= 1) {
+            // Time finished
+            playNotificationSound();
+
+            if (prev.isBreak) {
+              // Finish rest time and start study time
+              if (prev.currentInterval < prev.totalIntervals) {
+                const sessionDuration = calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes);
+                return {
+                  ...prev,
+                  currentSeconds: sessionDuration,
+                  totalSeconds: sessionDuration,
+                  isBreak: false,
+                  currentInterval: prev.currentInterval + 1,
+                  isRunning: settings.autoStart
+                };
+              } else {
+                return {
+                  ...prev,
+                  isRunning: false,
+                  isCompleted: true,
+                  currentSeconds: 0,
+                  completedSessions: prev.totalIntervals,
+                  totalStudyTime: settings.studyHours * 60
+                };
+              }
+            } else {
+              // Finish study time and start rest time
+              const breakDuration = settings.breakMinutes * 60;
+              return {
+                ...prev,
+                currentSeconds: breakDuration,
+                totalSeconds: breakDuration,
+                isBreak: true,
+                isRunning: settings.autoStart,
+                completedSessions: prev.completedSessions + 1,
+                totalStudyTime: prev.totalStudyTime + (calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes) / 60)
+              };
+            }
+          } else {
+            return {
+              ...prev,
+              currentSeconds: prev.currentSeconds - 1
+            };
+          }
+        });
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [timer.isRunning, timer.isCompleted, settings]);
+
+
+  // Calculate progress
+  const progress2 = timer.totalSeconds > 0 ?
+    ((timer.totalSeconds - timer.currentSeconds) / timer.totalSeconds) * 100 : 0;
+  const radius = 120;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (progress2 / 100) * circumference;
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('/loffie-chill.webp')`
         }}
       />
 
-      {/* Rain Effect */}
       {rainEnabled && (
         <div className="absolute inset-0 pointer-events-none z-10">
           {rainDrops.map(drop => (
@@ -50,7 +162,6 @@ const PomodoroApp: React.FC = () => {
         </div>
       )}
 
-      {/* Rain Control */}
       <button
         onClick={() => setRainEnabled(!rainEnabled)}
         className="absolute top-6 right-6 z-30 bg-black/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/30 transition-all hover:scale-110"
@@ -58,134 +169,22 @@ const PomodoroApp: React.FC = () => {
         <CloudRain className={`w-5 h-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
       </button>
 
-      {/* Main Content */}
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
         <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 w-full max-w-md border border-white/10 shadow-2xl">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-white text-xl font-semibold">🍅 Pomodoro</h1>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setShowSettings(!showSettings)}
-                className="p-2 text-white/70 hover:text-white transition-colors hover:bg-white/10 rounded-lg"
-              >
-                <Settings className="w-5 h-5" />
-              </button>
-              <button className="p-2 text-white/70 hover:text-white transition-colors hover:bg-white/10 rounded-lg">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Mode Selector */}
-          <div className="flex bg-black/20 rounded-lg p-1 mb-6">
-            {Object.entries(modes).map(([key, mode]) => (
-              <button
-                key={key}
-                onClick={() => switchMode(key as keyof typeof modes)}
-                className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                  timer.mode === key
-                    ? 'bg-orange-500 text-white shadow-lg'
-                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                }`}
-              >
-                {mode.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Focus Title */}
-          <div className="mb-4">
-            <input
-              type="text"
-              value={focusTitle}
-              onChange={(e) => setFocusTitle(e.target.value)}
-              placeholder="click to add focus title"
-              className="w-full bg-transparent text-white/70 text-center text-sm placeholder-white/50 border-none outline-none hover:text-white focus:text-white transition-colors py-2 rounded-lg hover:bg-white/5 focus:bg-white/5"
-            />
-          </div>
-
-          {/* Rive Animation */}
           <div>
-            <ClockAnimation 
-              isActive={timer.isActive} 
-              mode={timer.mode} 
-              progress={progress}
+            <ClockAnimation
+              timer={timer}
+              radius={radius}
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              formatTime={formatTime}
+              toggleTimer={toggleTimer}
+              resetTimer={resetTimer}
             />
-          </div>
-
-          {/* Timer Display */}
-          <div className="text-center mb-8 w-max mx-auto">
-            <div className="text-4xl font-light text-white mb-2">
-              {formatTime(timer.hours, timer.minutes, timer.seconds)}
-            </div>
-            <div className="flex justify-center text-xs text-white/50 uppercase tracking-wider">
-              <span className='flex-1'>HR</span>
-              <span className='flex-1'>MIN</span>
-              <span className='flex-1'>SEC</span>
-            </div>
-          </div>
-
-          {/* Mode Badge */}
-          <div className="text-center mb-6">
-            <span className="bg-black/30 px-4 py-2 rounded-full text-sm text-white/70 backdrop-blur-sm">
-              Mode: {modes[timer.mode].label}
-            </span>
-          </div>
-
-          {/* Controls */}
-          <div className="flex justify-center gap-4 mb-6">
-            <button
-              onClick={toggleTimer}
-              className={`px-8 py-3 rounded-lg font-medium transition-all flex items-center gap-2 transform hover:scale-105 ${
-                timer.isActive 
-                  ? 'bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/25'
-                  : 'bg-white text-black hover:bg-white/90 shadow-lg'
-              }`}
-            >
-              {timer.isActive ? (
-                <>
-                  <Pause className="w-4 h-4" />
-                  Pause Timer
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4" />
-                  Start Timer
-                </>
-              )}
-            </button>
-            <button
-              onClick={resetTimer}
-              className="p-3 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all transform hover:scale-105"
-            >
-              <RotateCcw className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="mb-4">
-            <div className="w-full bg-black/20 rounded-full h-2">
-              <div 
-                className="bg-gradient-to-r from-orange-500 to-pink-500 h-2 rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${progress * 100}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center text-xs text-white/50 mb-2">
-            Not into pomodoro? Try our stopwatch/time-tracker with Track
-          </div>
-
-          {/* Cycles Counter */}
-          <div className="text-center text-sm text-white/70">
-            🏆 Completed cycles: {timer.cycles}
           </div>
         </div>
       </div>
 
-      {/* Custom CSS */}
       <style>{`
         @keyframes fall {
           0% {
@@ -195,15 +194,6 @@ const PomodoroApp: React.FC = () => {
           100% {
             transform: translateY(100vh);
             opacity: 0;
-          }
-        }
-        
-        @keyframes pulse {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
           }
         }
       `}</style>

@@ -1,116 +1,96 @@
-import { useEffect, useRef } from "react";
-
+import { Check, Pause, Play, RotateCcw } from "lucide-react";
+import type { TimerState } from "../types";
 
 interface ClockAnimationProps {
-    isActive: boolean;
-    mode: string;
-    progress: number;
+    timer: TimerState;
+    radius: number;
+    strokeDasharray: number;
+    strokeDashoffset: number;
+    formatTime: (seconds: number) => string;
+    toggleTimer: () => void;
+    resetTimer: () => void;
 }
 
-export default function ClockAnimation({ isActive, mode, progress }: ClockAnimationProps) {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        // Simulación de animación Rive con canvas nativo
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = Math.min(centerX, centerY) - 20;
-
-            // Colores según el modo
-            const modeColors = {
-                focus: { primary: '#ff6b35', secondary: '#f7931e' },
-                shortBreak: { primary: '#4ecdc4', secondary: '#44a08d' },
-                longBreak: { primary: '#667eea', secondary: '#764ba2' }
-            };
-
-            const colors = modeColors[mode as keyof typeof modeColors] || modeColors.focus;
-
-            // Fondo del círculo
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Progreso del timer
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - 10, -Math.PI / 2, (-Math.PI / 2) + (progress * Math.PI * 2));
-            ctx.strokeStyle = colors.primary;
-            ctx.lineWidth = 8;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-
-            // Crear gradiente para el progreso
-            const gradient = ctx.createLinearGradient(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
-            gradient.addColorStop(0, colors.primary);
-            gradient.addColorStop(1, colors.secondary);
-
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius - 10, -Math.PI / 2, (-Math.PI / 2) + (progress * Math.PI * 2));
-            ctx.strokeStyle = gradient;
-            ctx.lineWidth = 6;
-            ctx.stroke();
-
-            // Círculo central animado
-            const pulseRadius = isActive ? 15 + Math.sin(Date.now() * 0.005) * 3 : 12;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, pulseRadius, 0, Math.PI * 2);
-            ctx.fillStyle = isActive ? colors.primary : 'rgba(255, 255, 255, 0.3)';
-            ctx.fill();
-
-            // Partículas flotantes (efecto mágico)
-            if (isActive) {
-                for (let i = 0; i < 8; i++) {
-                    const angle = (Date.now() * 0.001 + i * Math.PI / 4) % (Math.PI * 2);
-                    const particleRadius = radius - 30;
-                    const x = centerX + Math.cos(angle) * particleRadius;
-                    const y = centerY + Math.sin(angle) * particleRadius;
-                    const size = 2 + Math.sin(Date.now() * 0.01 + i) * 1;
-
-                    ctx.beginPath();
-                    ctx.arc(x, y, size, 0, Math.PI * 2);
-                    ctx.fillStyle = `${colors.primary}80`;
-                    ctx.fill();
-                }
-            }
-
-            // Números del reloj
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.font = '14px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            for (let i = 0; i < 12; i++) {
-                const angle = (i * Math.PI) / 6 - Math.PI / 2;
-                const x = centerX + Math.cos(angle) * (radius - 30);
-                const y = centerY + Math.sin(angle) * (radius - 30);
-                ctx.fillText((i === 0 ? 12 : i).toString(), x, y);
-            }
-
-            requestAnimationFrame(animate);
-        };
-
-        animate();
-    }, [isActive, mode, progress]);
-
+export default function ClockAnimation({ timer, radius, strokeDasharray, strokeDashoffset, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
     return (
-        <canvas
-            ref={canvasRef}
-            width={200}
-            height={200}
-            className="mx-auto mb-2"
-            style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3))' }}
-        />
-    );
-};
+        <div className="relative">
+            <div className="flex flex-col items-center">
+                {/* SVG del reloj circular */}
+                <div className="relative">
+                    <svg width="280" height="280" className="transform -rotate-90">
+                        {/* Círculo de fondo */}
+                        <circle
+                            cx="140"
+                            cy="140"
+                            r={radius}
+                            fill="transparent"
+                            stroke="rgba(255, 255, 255, 0.1)"
+                            strokeWidth="8"
+                        />
+
+                        {/* Círculo de progreso */}
+                        <circle
+                            cx="140"
+                            cy="140"
+                            r={radius}
+                            fill="transparent"
+                            stroke={timer.isBreak ? "#10B981" : "#8B5CF6"}
+                            strokeWidth="8"
+                            strokeLinecap="round"
+                            strokeDasharray={strokeDasharray}
+                            strokeDashoffset={strokeDashoffset}
+                            className="transition-all duration-1000 ease-out"
+                            style={{
+                                filter: `drop-shadow(0 0 10px ${timer.isBreak ? '#10B981' : '#8B5CF6'})`
+                            }}
+                        />
+                    </svg>
+
+                    {/* Contenido central */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        {timer.isCompleted ? (
+                            <div className="text-center">
+                                <Check className="w-16 h-16 text-green-400 mx-auto mb-2" />
+                                <p className="text-white text-lg font-semibold">¡Completado!</p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="text-center mb-4">
+                                    <p className="text-white text-sm opacity-80">
+                                        {timer.isBreak ? 'Descanso' : 'Estudio'}
+                                    </p>
+                                    <p className="text-white text-xs opacity-60">
+                                        Sesión {timer.currentInterval} de {timer.totalIntervals}
+                                    </p>
+                                </div>
+
+                                <div className="text-5xl font-mono font-bold text-white mb-4">
+                                    {formatTime(timer.currentSeconds)}
+                                </div>
+
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={toggleTimer}
+                                        className="p-4 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:scale-105"
+                                    >
+                                        {timer.isRunning ?
+                                            <Pause className="w-8 h-8" /> :
+                                            <Play className="w-8 h-8" />
+                                        }
+                                    </button>
+
+                                    <button
+                                        onClick={resetTimer}
+                                        className="p-4 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:scale-105"
+                                    >
+                                        <RotateCcw className="w-8 h-8" />
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
