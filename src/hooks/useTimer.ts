@@ -1,14 +1,7 @@
 import { useEffect, useState } from "react"
 import type { PomodoroSettings, TimerState } from "../types"
 
-export function useTimer() {
-  const [settings, setSettings] = useState<PomodoroSettings>({
-    studyHours: 1,
-    breakMinutes: 10,
-    intervals: 2,
-    soundEnabled: true,
-    autoStart: true
-  })
+export function useTimer({settings}: {settings: PomodoroSettings}) {
   const [timer, setTimer] = useState<TimerState>({
     isRunning: false,
     currentSeconds: 0,
@@ -44,6 +37,12 @@ export function useTimer() {
     })
   }
 
+  const formatTime = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+  }
+
   const toggleTimer = () => {
     setTimer(prev => ({ ...prev, isRunning: !prev.isRunning }))
   }
@@ -60,10 +59,9 @@ export function useTimer() {
   return {
     timer,
     setTimer,
-    settings,
-    setSettings,
     initializeTimer,
     calculateSessionDuration,
+    formatTime,
     toggleTimer,
     resetTimer
   }
