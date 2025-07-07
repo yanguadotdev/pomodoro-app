@@ -108,20 +108,17 @@ const PomodoroApp: React.FC = () => {
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/loffie-chill.webp')`
-        }}
-      />
-
+    <div className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `url('/loffie-chill.webp')`
+      }}
+    >
       {rainEnabled && (
         <div className="absolute inset-0 pointer-events-none z-10">
           {rainDrops.map(drop => (
             <div
               key={drop.id}
-              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200/50 to-transparent"
+              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200/60 to-transparent"
               style={{
                 left: `${drop.left}%`,
                 height: `${drop.height}px`,
@@ -165,7 +162,7 @@ const PomodoroApp: React.FC = () => {
           }
           100% {
             transform: translateY(100vh);
-            opacity: 0;
+            opacity: 0.1;
           }
         }
       `}</style>
