@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { CloudRain } from 'lucide-react'
-import { useRainEffect } from './hooks/useRainEffect'
 import ClockAnimation from './components/ClockAnimation'
 import { useTimer, useSettings, useDocumentTitle } from './hooks'
 import Button from './components/Button'
+import RainEffect from './components/RainEffect'
 
 const PomodoroApp: React.FC = () => {
   const { settings } = useSettings()
   const [rainEnabled, setRainEnabled] = useState(true)
 
   // CUSTOM HOOKS
-  const { rainDrops } = useRainEffect(rainEnabled, 'storm')
   const { timer, formatTime, toggleTimer, resetTimer } = useTimer({ settings })
   useDocumentTitle({ timer, formatTime })
 
@@ -21,21 +20,7 @@ const PomodoroApp: React.FC = () => {
       }}
     >
       {rainEnabled && (
-        <div className="absolute inset-0 pointer-events-none z-10">
-          {rainDrops.map(drop => (
-            <div
-              key={drop.id}
-              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200/60 to-transparent"
-              style={{
-                left: `${drop.left}%`,
-                height: `${drop.height}px`,
-                opacity: drop.opacity,
-                animation: `rainFall ${drop.animationDuration}s linear`,
-                filter: 'blur(0.5px)'
-              }}
-            />
-          ))}
-        </div>
+        <RainEffect rainEnabled={rainEnabled} />
       )}
 
       <Button
