@@ -1,103 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { CloudRain } from 'lucide-react'
 import { useRainEffect } from './hooks/useRainEffect'
 import ClockAnimation from './components/ClockAnimation'
-import { useTimer, useSettings, useSound } from './hooks'
+import { useTimer, useSettings, useDocumentTitle } from './hooks'
 import Button from './components/Button'
 
 const PomodoroApp: React.FC = () => {
   const { settings } = useSettings()
   const [rainEnabled, setRainEnabled] = useState(true)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // CUSTOM HOOKS
-  const { playNotificationSound } = useSound({ soundEnabled: settings.soundEnabled })
   const { rainDrops } = useRainEffect(rainEnabled, 'storm')
-  const { timer, setTimer, calculateSessionDuration, formatTime, toggleTimer, resetTimer } = useTimer({ settings })
-
-  const updatePageTitle = (seconds: number, isBreak: boolean, isRunning: boolean) => {
-    if (isRunning) {
-      const timeStr = formatTime(seconds)
-      const mode = isBreak ? 'Descanso' : 'Estudio'
-      document.title = `${timeStr} - ${mode} | Pomodoro Timer`
-    } else {
-      document.title = 'Pomodoro Timer'
-    }
-  }
-
-  useEffect(() => {
-    updatePageTitle(timer.currentSeconds, timer.isBreak, timer.isRunning)
-  }, [timer.currentSeconds, timer.isBreak, timer.isRunning])
-
-  useEffect(() => {
-    return () => {
-      document.title = 'Pomodoro Timer'
-    }
-  }, [])
-
-  useEffect(() => {
-    if (timer.isRunning && !timer.isCompleted) {
-      intervalRef.current = setInterval(() => {
-        setTimer(prev => {
-          if (prev.currentSeconds <= 1) {
-            // Time finished
-            playNotificationSound()
-
-            if (prev.isBreak) {
-              // Finish rest time and start study time
-              if (prev.currentInterval < prev.totalIntervals) {
-                const sessionDuration = calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes)
-                return {
-                  ...prev,
-                  currentSeconds: sessionDuration,
-                  totalSeconds: sessionDuration,
-                  isBreak: false,
-                  currentInterval: prev.currentInterval + 1,
-                  isRunning: settings.autoStart
-                }
-              } else {
-                return {
-                  ...prev,
-                  isRunning: false,
-                  isCompleted: true,
-                  currentSeconds: 0,
-                  completedSessions: prev.totalIntervals,
-                  totalStudyTime: settings.studyHours * 60
-                }
-              }
-            } else {
-              // Finish study time and start rest time
-              const breakDuration = settings.breakMinutes * 60
-              return {
-                ...prev,
-                currentSeconds: breakDuration,
-                totalSeconds: breakDuration,
-                isBreak: true,
-                isRunning: settings.autoStart,
-                completedSessions: prev.completedSessions + 1,
-                totalStudyTime: prev.totalStudyTime + (calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes) / 60)
-              }
-            }
-          } else {
-            return {
-              ...prev,
-              currentSeconds: prev.currentSeconds - 1
-            }
-          }
-        })
-      }, 1000)
-    } else {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-    }
-
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
-      }
-    }
-  }, [timer.isRunning, timer.isCompleted, settings])
+  const { timer, formatTime, toggleTimer, resetTimer } = useTimer({ settings })
+  useDocumentTitle({ timer, formatTime })
 
 
   // Calculate progress
