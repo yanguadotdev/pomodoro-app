@@ -60,6 +60,9 @@ export function useTimer({ settings }: { settings: PomodoroSettings }) {
   }, [settings])
 
   useEffect(() => {
+    const sessionDuration = calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes)
+    const breakDuration = settings.breakMinutes * 60
+
     if (timer.isRunning && !timer.isCompleted) {
       intervalRef.current = setInterval(() => {
         setTimer(prev => {
@@ -67,31 +70,29 @@ export function useTimer({ settings }: { settings: PomodoroSettings }) {
             // Time finished
             playNotificationSound()
 
+            if (prev.currentInterval === prev.totalIntervals) {
+              return {
+                ...prev,
+                isRunning: false,
+                isCompleted: true,
+                currentSeconds: 0,
+                completedSessions: prev.totalIntervals,
+                totalStudyTime: settings.studyHours * 60
+              }
+            }
+
             if (prev.isBreak) {
               // Finish rest time and start study time
-              if (prev.currentInterval < prev.totalIntervals) {
-                const sessionDuration = calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes)
-                return {
-                  ...prev,
-                  currentSeconds: sessionDuration,
-                  totalSeconds: sessionDuration,
-                  isBreak: false,
-                  currentInterval: prev.currentInterval + 1,
-                  isRunning: settings.autoStart
-                }
-              } else {
-                return {
-                  ...prev,
-                  isRunning: false,
-                  isCompleted: true,
-                  currentSeconds: 0,
-                  completedSessions: prev.totalIntervals,
-                  totalStudyTime: settings.studyHours * 60
-                }
+              return {
+                ...prev,
+                currentSeconds: sessionDuration,
+                totalSeconds: sessionDuration,
+                isBreak: false,
+                currentInterval: prev.currentInterval + 1,
+                isRunning: settings.autoStart
               }
             } else {
               // Finish study time and start rest time
-              const breakDuration = settings.breakMinutes * 60
               return {
                 ...prev,
                 currentSeconds: breakDuration,
@@ -109,7 +110,7 @@ export function useTimer({ settings }: { settings: PomodoroSettings }) {
             }
           }
         })
-      }, 10)
+      }, 100)
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)

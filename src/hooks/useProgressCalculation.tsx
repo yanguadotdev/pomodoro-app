@@ -26,5 +26,5 @@ export const useProgressCalculation = ({
       strokeDasharray,
       strokeDashoffset
     }
-  }, [timer, radius])
+  }, [timer.totalSeconds, timer.currentSeconds, radius])
 }
