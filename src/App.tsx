@@ -43,19 +43,6 @@ const PomodoroApp: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes rainFall {
-          0% {
-            transform: translateY(-20px);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh);
-            opacity: 0.1;
-          }
-        }
-      `}</style>
     </div>
   )
 }
