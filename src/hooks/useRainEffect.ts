@@ -9,7 +9,7 @@ const rainConfigs = {
   light: { interval: 200, dropsPerInterval: 1, maxDrops: 50 },
   medium: { interval: 150, dropsPerInterval: 1, maxDrops: 80 },
   heavy: { interval: 100, dropsPerInterval: 2, maxDrops: 120 },
-  storm: { interval: 50, dropsPerInterval: 4, maxDrops: 180 }
+  storm: { interval: 30, dropsPerInterval: 4, maxDrops: 160 }
 };
 
 export const useRainEffect = (rainEnabled: boolean, intensity: RainConfig['intensity'] = 'medium') => {

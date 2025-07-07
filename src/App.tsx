@@ -34,7 +34,6 @@ const PomodoroApp: React.FC = () => {
     }
   }, [])
 
-
   useEffect(() => {
     if (timer.isRunning && !timer.isCompleted) {
       intervalRef.current = setInterval(() => {
@@ -101,12 +100,12 @@ const PomodoroApp: React.FC = () => {
 
 
   // Calculate progress
-  const progress2 = timer.totalSeconds > 0 ?
+  const progress = timer.totalSeconds > 0 ?
     ((timer.totalSeconds - timer.currentSeconds) / timer.totalSeconds) * 100 : 0
   const radius = 120
   const circumference = 2 * Math.PI * radius
   const strokeDasharray = circumference
-  const strokeDashoffset = circumference - (progress2 / 100) * circumference
+  const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -122,12 +121,12 @@ const PomodoroApp: React.FC = () => {
           {rainDrops.map(drop => (
             <div
               key={drop.id}
-              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200 to-transparent"
+              className="absolute w-[.5px] bg-gradient-to-b from-transparent via-blue-200/50 to-transparent"
               style={{
                 left: `${drop.left}%`,
                 height: `${drop.height}px`,
                 opacity: drop.opacity,
-                animation: `fall ${drop.animationDuration}s linear`,
+                animation: `rainFall ${drop.animationDuration}s linear`,
                 filter: 'blur(0.5px)'
               }}
             />
@@ -159,14 +158,14 @@ const PomodoroApp: React.FC = () => {
       </div>
 
       <style>{`
-        @keyframes fall {
+        @keyframes rainFall {
           0% {
-            transform: translateY(-100px)
-            opacity: 1
+            transform: translateY(-20px);
+            opacity: 1;
           }
           100% {
-            transform: translateY(100vh)
-            opacity: 0
+            transform: translateY(100vh);
+            opacity: 0;
           }
         }
       `}</style>
