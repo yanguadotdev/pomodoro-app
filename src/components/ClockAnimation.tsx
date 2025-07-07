@@ -15,10 +15,10 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
     return (
         <div className="relative">
             <div className="flex flex-col items-center">
-                {/* SVG del reloj circular */}
+                {/* SVG circular clock */}
                 <div className="relative">
                     <svg width="280" height="280" className="transform -rotate-90">
-                        {/* Círculo de fondo */}
+                        {/* Circle background */}
                         <circle
                             cx="140"
                             cy="140"
@@ -28,7 +28,7 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
                             strokeWidth="8"
                         />
 
-                        {/* Círculo de progreso */}
+                        {/* Circle progress */}
                         <circle
                             cx="140"
                             cy="140"
@@ -46,7 +46,7 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
                         />
                     </svg>
 
-                    {/* Contenido central */}
+                    {/* Central content */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         {timer.isCompleted ? (
                             <div className="text-center">
@@ -68,22 +68,22 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
                                     {formatTime(timer.currentSeconds)}
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="flex items-center gap-4">
                                     <button
                                         onClick={toggleTimer}
-                                        className="p-4 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:scale-105"
+                                        className="p-3 bg-white/20 text-green-500 border border-b-2 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:border-b-4 active:border-b"
                                     >
-                                        {timer.isRunning ?
-                                            <Pause className="w-8 h-8" /> :
-                                            <Play className="w-8 h-8" />
+                                        {timer.isRunning
+                                            ? <Pause className="size-7" />
+                                            : <Play className="size-7" />
                                         }
                                     </button>
 
                                     <button
                                         onClick={resetTimer}
-                                        className="p-4 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:scale-105"
+                                        className="p-3 bg-red-500/20 text-red-500 border border-b-2 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:border-b-4 active:border-b focus:outline-red-500"
                                     >
-                                        <RotateCcw className="w-8 h-8" />
+                                        <RotateCcw className="size-7" />
                                     </button>
                                 </div>
                             </>

@@ -133,13 +133,13 @@ const PomodoroApp: React.FC = () => {
 
       <button
         onClick={() => setRainEnabled(!rainEnabled)}
-        className="absolute top-6 right-6 z-30 bg-black/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-black/30 transition-all hover:scale-110"
+        className={`absolute border-b-2 top-6 right-6 z-30 ${rainEnabled ? 'bg-blue-300/20 border-blue-300' : 'bg-black/20 border-black'} border backdrop-blur-sm text-white p-3 rounded-full transition-all hover:border-b-4 active:border-b`}
       >
         <CloudRain className={`w-5 h-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
       </button>
 
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
-        <div className="bg-black/40 backdrop-blur-md rounded-2xl p-8 w-full max-w-md border border-white/10 shadow-2xl">
+        <div className="p-8 w-full max-w-md">
           <div>
             <ClockAnimation
               timer={timer}
