@@ -14,15 +14,6 @@ const PomodoroApp: React.FC = () => {
   const { timer, formatTime, toggleTimer, resetTimer } = useTimer({ settings })
   useDocumentTitle({ timer, formatTime })
 
-
-  // Calculate progress
-  const progress = timer.totalSeconds > 0 ?
-    ((timer.totalSeconds - timer.currentSeconds) / timer.totalSeconds) * 100 : 0
-  const radius = 120
-  const circumference = 2 * Math.PI * radius
-  const strokeDasharray = circumference
-  const strokeDashoffset = circumference - (progress / 100) * circumference
-
   return (
     <div className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
       style={{
@@ -60,9 +51,6 @@ const PomodoroApp: React.FC = () => {
           <div>
             <ClockAnimation
               timer={timer}
-              radius={radius}
-              strokeDasharray={strokeDasharray}
-              strokeDashoffset={strokeDashoffset}
               formatTime={formatTime}
               toggleTimer={toggleTimer}
               resetTimer={resetTimer}

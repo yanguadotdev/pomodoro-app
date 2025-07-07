@@ -1,18 +1,18 @@
 import { Check, Pause, Play, RotateCcw } from "lucide-react";
 import type { TimerState } from "../types";
 import Button from "./Button";
+import { useProgressCalculation } from "../hooks";
 
 interface ClockAnimationProps {
     timer: TimerState;
-    radius: number;
-    strokeDasharray: number;
-    strokeDashoffset: number;
     formatTime: (seconds: number) => string;
     toggleTimer: () => void;
     resetTimer: () => void;
 }
 
-export default function ClockAnimation({ timer, radius, strokeDasharray, strokeDashoffset, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
+export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
+    const { radius, strokeDasharray, strokeDashoffset } = useProgressCalculation({ timer })
+
     return (
         <div className="relative">
             <div className="flex flex-col items-center">
