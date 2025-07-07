@@ -3,6 +3,7 @@ import { CloudRain } from 'lucide-react'
 import { useRainEffect } from './hooks/useRainEffect'
 import ClockAnimation from './components/ClockAnimation'
 import { useTimer, useSettings, useSound } from './hooks'
+import Button from './components/Button'
 
 const PomodoroApp: React.FC = () => {
   const { settings } = useSettings()
@@ -131,12 +132,13 @@ const PomodoroApp: React.FC = () => {
         </div>
       )}
 
-      <button
+      <Button
         onClick={() => setRainEnabled(!rainEnabled)}
-        className={`absolute border-b-2 top-6 right-6 z-30 ${rainEnabled ? 'bg-blue-300/20 border-blue-300' : 'bg-black/20 border-black'} border backdrop-blur-sm text-white p-3 rounded-full transition-all hover:border-b-4 active:border-b`}
+        variant={rainEnabled ? 'blue' : 'black'}
+        className={`absolute border-b-2 top-6 right-6 z-30`}
       >
-        <CloudRain className={`w-5 h-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
-      </button>
+        <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
+      </Button>
 
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
         <div className="p-8 w-full max-w-md">

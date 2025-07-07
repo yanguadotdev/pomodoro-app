@@ -1,5 +1,6 @@
 import { Check, Pause, Play, RotateCcw } from "lucide-react";
 import type { TimerState } from "../types";
+import Button from "./Button";
 
 interface ClockAnimationProps {
     timer: TimerState;
@@ -24,7 +25,7 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
                             cy="140"
                             r={radius}
                             fill="transparent"
-                            stroke="rgba(255, 255, 255, 0.1)"
+                            stroke="rgba(255, 255, 255, .2)"
                             strokeWidth="8"
                         />
 
@@ -69,22 +70,22 @@ export default function ClockAnimation({ timer, radius, strokeDasharray, strokeD
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <button
+                                    <Button
                                         onClick={toggleTimer}
-                                        className="p-3 bg-white/20 text-green-500 border border-b-2 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:border-b-4 active:border-b"
+                                        variant="green"
                                     >
                                         {timer.isRunning
                                             ? <Pause className="size-7" />
                                             : <Play className="size-7" />
                                         }
-                                    </button>
+                                    </Button>
 
-                                    <button
+                                    <Button
                                         onClick={resetTimer}
-                                        className="p-3 bg-red-500/20 text-red-500 border border-b-2 rounded-full hover:bg-opacity-30 transition-all duration-200 backdrop-blur-sm hover:border-b-4 active:border-b focus:outline-red-500"
+                                        variant="red"
                                     >
                                         <RotateCcw className="size-7" />
-                                    </button>
+                                    </Button>
                                 </div>
                             </>
                         )}
