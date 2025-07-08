@@ -4,6 +4,7 @@ import ClockAnimation from './components/ClockAnimation'
 import { useTimer, useSettings, useDocumentTitle } from './hooks'
 import Button from './components/Button'
 import RainEffect from './components/RainEffect'
+import PomodoroSettings from '@/components/PomodoroSettings'
 
 const PomodoroApp: React.FC = () => {
   const { settings } = useSettings()
@@ -32,14 +33,16 @@ const PomodoroApp: React.FC = () => {
       </Button>
 
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
-        <div className="p-8 w-full max-w-md">
-          <div>
-            <ClockAnimation
-              timer={timer}
-              formatTime={formatTime}
-              toggleTimer={toggleTimer}
-              resetTimer={resetTimer}
-            />
+        <div className="p-8 w-full max-w-md bg-black/20 backdrop-blur-xs rounded-xl relative">
+          <ClockAnimation
+            timer={timer}
+            formatTime={formatTime}
+            toggleTimer={toggleTimer}
+            resetTimer={resetTimer}
+          />
+
+          <div className="absolute top-4 right-4 size-8 rounded-full">
+            <PomodoroSettings />
           </div>
         </div>
       </div>

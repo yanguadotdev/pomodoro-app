@@ -110,7 +110,7 @@ export function useTimer({ settings }: { settings: PomodoroSettings }) {
             }
           }
         })
-      }, 100)
+      }, 1000)
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
