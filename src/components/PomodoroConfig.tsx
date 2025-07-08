@@ -23,6 +23,7 @@ import type { PomodoroSettings } from "@/types"
 import { calculateSessionDuration } from "@/lib/timer-utils"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { ConfigContext, type ContextValueProps } from "@/context/configContext"
+import SpecialButton from "./SpecialButton"
 
 export default function PomodoroConfig() {
     const [open, setOpen] = useState(false)
@@ -115,7 +116,7 @@ function EditStudyHours({ className }: React.ComponentProps<"div">) {
 
             <DialogFooter>
                 <DialogClose asChild>
-                    <button onClick={() => setSettings(tempSettings)}>Guardar</button>
+                    <SpecialButton onClick={() => setSettings(tempSettings)}>Guardar</SpecialButton>
                 </DialogClose>
             </DialogFooter>
         </div>

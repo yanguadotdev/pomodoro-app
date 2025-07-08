@@ -32,7 +32,7 @@ const PomodoroApp: React.FC = () => {
       </Button>
 
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
-        <div className="p-8 w-full max-w-md bg-black/20 backdrop-blur-xs rounded-xl relative">
+        <div className="p-8 w-full max-w-md relative">
           <ClockAnimation
             timer={timer}
             formatTime={formatTime}
