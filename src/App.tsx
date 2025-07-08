@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { CloudRain } from 'lucide-react'
 import ClockAnimation from './components/ClockAnimation'
-import { useTimer, useSettings, useDocumentTitle } from './hooks'
+import { useTimer, useDocumentTitle } from './hooks'
 import Button from './components/Button'
 import RainEffect from './components/RainEffect'
 import PomodoroConfig from '@/components/PomodoroConfig'
 
 const PomodoroApp: React.FC = () => {
-  const { settings } = useSettings()
   const [rainEnabled, setRainEnabled] = useState(true)
 
   // CUSTOM HOOKS
-  const { timer, formatTime, toggleTimer, resetTimer } = useTimer({ settings })
+  const { timer, formatTime, toggleTimer, resetTimer } = useTimer()
   useDocumentTitle({ timer, formatTime })
 
   return (

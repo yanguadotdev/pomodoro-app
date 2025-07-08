@@ -13,16 +13,16 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { cn } from "@/lib/utils"
 import { SettingsIcon } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import type { PomodoroSettings } from "@/types"
-import { useSettings } from "@/hooks/useSettings"
 import { calculateSessionDuration } from "@/lib/timer-utils"
 import { DialogClose } from "@radix-ui/react-dialog"
+import { ConfigContext, type ContextValueProps } from "@/context/configContext"
 
 export default function PomodoroConfig() {
     const [open, setOpen] = useState(false)
@@ -64,7 +64,7 @@ export default function PomodoroConfig() {
 }
 
 function EditStudyHours({ className }: React.ComponentProps<"div">) {
-    const { tempSettings, setTempSettings, setSettings } = useSettings()
+    const { tempSettings, setTempSettings, setSettings } = useContext(ConfigContext) as ContextValueProps
     return (
         <div className={cn("grid items-start gap-6", className)}>
             <SelectField
@@ -115,7 +115,7 @@ function EditStudyHours({ className }: React.ComponentProps<"div">) {
 
             <DialogFooter>
                 <DialogClose asChild>
-                    <button>Guardar</button>
+                    <button onClick={() => setSettings(tempSettings)}>Guardar</button>
                 </DialogClose>
             </DialogFooter>
         </div>

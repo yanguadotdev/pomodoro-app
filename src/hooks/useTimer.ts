@@ -1,16 +1,18 @@
-import { useEffect, useRef, useState } from "react"
-import type { PomodoroSettings, TimerState } from "../types"
+import { useContext, useEffect, useRef, useState } from "react"
+import type { TimerState } from "../types"
 import { useSound } from "./useSound"
 import { calculateSessionDuration } from "@/lib/timer-utils"
+import { ConfigContext, type ContextValueProps } from "@/context/configContext"
 
-export function useTimer({ settings }: { settings: PomodoroSettings }) {
+export function useTimer() {
+  const { settings } = useContext(ConfigContext) as ContextValueProps
   const [timer, setTimer] = useState<TimerState>({
     isRunning: false,
     currentSeconds: 0,
     totalSeconds: 0,
     isBreak: false,
     currentInterval: 1,
-    totalIntervals: 2,
+    totalIntervals: settings.intervals,
     isCompleted: false,
     completedSessions: 0,
     totalStudyTime: 0
