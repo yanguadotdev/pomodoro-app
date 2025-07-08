@@ -24,6 +24,7 @@ import { calculateSessionDuration } from "@/lib/timer-utils"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { ConfigContext, type ContextValueProps } from "@/context/configContext"
 import SpecialButton from "./SpecialButton"
+import { useSound } from "@/hooks/useSound"
 
 export default function PomodoroConfig() {
     const [open, setOpen] = useState(false)
@@ -66,6 +67,13 @@ export default function PomodoroConfig() {
 
 function EditStudyHours({ className }: React.ComponentProps<"div">) {
     const { tempSettings, setTempSettings, setSettings } = useContext(ConfigContext) as ContextValueProps
+    const { playNotificationSound } = useSound({ soundEnabled: !tempSettings.soundEnabled })
+
+    const toggleNotification = () => {
+        playNotificationSound()
+        setTempSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))
+    }
+
     return (
         <div className={cn("grid items-start gap-6", className)}>
             <SelectField
@@ -95,7 +103,7 @@ function EditStudyHours({ className }: React.ComponentProps<"div">) {
             <div className="flex items-center gap-2 justify-between">
                 <Label htmlFor="soundEnabled">Sonido de notificacion</Label>
                 <Switch
-                    onCheckedChange={() => setTempSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
+                    onCheckedChange={toggleNotification}
                     defaultChecked={tempSettings.soundEnabled}
                     id="soundEnabled"
                 />
