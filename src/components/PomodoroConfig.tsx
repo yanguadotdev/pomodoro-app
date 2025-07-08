@@ -1,6 +1,7 @@
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -18,9 +19,12 @@ import { SettingsIcon } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import type { PomodoroSettings } from "@/types"
+import { useSettings } from "@/hooks/useSettings"
+import { calculateSessionDuration } from "@/lib/timer-utils"
+import { DialogClose } from "@radix-ui/react-dialog"
 
-
-export default function PomodoroSettings() {
+export default function PomodoroConfig() {
     const [open, setOpen] = useState(false)
     const isDesktop = true
 
@@ -60,22 +64,60 @@ export default function PomodoroSettings() {
 }
 
 function EditStudyHours({ className }: React.ComponentProps<"div">) {
+    const { tempSettings, setTempSettings, setSettings } = useSettings()
     return (
         <div className={cn("grid items-start gap-6", className)}>
-            <SelectField label="Horas de estudio" options={[1, 2, 3, 4, 5, 6]} />
-            <SelectField label="Tiempo de descanso" options={[5, 10, 15, 20]} />
-            <SelectField label="Intervalos de estudio" options={[2, 3, 4, 5, 6]} />
+            <SelectField
+                label="Horas de estudio"
+                name="studyHours"
+                defaultValue={tempSettings.studyHours.toString()}
+                itemLabel="hora"
+                options={[1, 2, 3, 4, 5, 6]}
+                setTempSettings={setTempSettings}
+            />
+            <SelectField
+                label="Tiempo de descanso"
+                name="breakMinutes"
+                defaultValue={tempSettings.breakMinutes.toString()}
+                itemLabel="minuto"
+                options={[5, 10, 15, 20]}
+                setTempSettings={setTempSettings}
+            />
+            <SelectField
+                label="Intervalos de estudio"
+                name="intervals"
+                defaultValue={tempSettings.intervals.toString()}
+                itemLabel="intervalo"
+                options={[2, 3, 4, 5, 6]}
+                setTempSettings={setTempSettings}
+            />
             <div className="flex items-center gap-2 justify-between">
                 <Label htmlFor="soundEnabled">Sonido de notificacion</Label>
-                <Switch defaultChecked id="soundEnabled" />
+                <Switch
+                    onCheckedChange={() => setTempSettings((prev) => ({ ...prev, soundEnabled: !prev.soundEnabled }))}
+                    defaultChecked={tempSettings.soundEnabled}
+                    id="soundEnabled"
+                />
             </div>
 
             <div className="flex items-center gap-2 justify-between">
                 <Label htmlFor="autoStart">Inicio automatico</Label>
-                <Switch id="autoStart" />
+                <Switch
+                    onCheckedChange={() => setTempSettings((prev) => ({ ...prev, autoStart: !prev.autoStart }))}
+                    defaultChecked={tempSettings.autoStart}
+                    id="autoStart"
+                />
             </div>
 
-            <button>Guardar</button>
+            <div className="text-sm text-white/85 bg-black/50 p-3 rounded-lg">
+                <p>Cada sesión durará: <strong>{Math.floor(calculateSessionDuration(tempSettings.studyHours, tempSettings.intervals, tempSettings.breakMinutes) / 60)} minutos</strong></p>
+            </div>
+
+            <DialogFooter>
+                <DialogClose asChild>
+                    <button>Guardar</button>
+                </DialogClose>
+            </DialogFooter>
         </div>
     )
 }
@@ -83,14 +125,22 @@ function EditStudyHours({ className }: React.ComponentProps<"div">) {
 
 interface SelectFieldProps {
     label: string
+    name: string
+    itemLabel: string
     selectLabel?: string
+    defaultValue: string
     options: number[]
+    setTempSettings: React.Dispatch<React.SetStateAction<PomodoroSettings>>
 }
-function SelectField({ label, selectLabel, options }: SelectFieldProps) {
+function SelectField({ label, name, itemLabel, selectLabel, defaultValue, options, setTempSettings }: SelectFieldProps) {
     return (
         <div className="grid gap-3">
-            <Label htmlFor="breakHours">{label}</Label>
-            <Select name="breakHours">
+            <Label htmlFor={name}>{label}</Label>
+            <Select
+                name={name}
+                defaultValue={defaultValue}
+                onValueChange={(e) => setTempSettings((prev) => ({ ...prev, [name]: parseInt(e) }))}
+            >
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecciona una opcion" />
                 </SelectTrigger>
@@ -98,9 +148,9 @@ function SelectField({ label, selectLabel, options }: SelectFieldProps) {
                     <SelectGroup>
                         {selectLabel && <SelectLabel>{selectLabel}</SelectLabel>}
                         {
-                            options.map((minutes) => (
-                                <SelectItem key={minutes} value={minutes.toString()}>
-                                    {minutes} minutos
+                            options.map((value) => (
+                                <SelectItem key={value} value={value.toString()}>
+                                    {value} {itemLabel}{value === 1 ? '' : 's'}
                                 </SelectItem>
                             ))
                         }

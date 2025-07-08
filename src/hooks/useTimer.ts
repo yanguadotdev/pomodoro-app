@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import type { PomodoroSettings, TimerState } from "../types"
 import { useSound } from "./useSound"
+import { calculateSessionDuration } from "@/lib/timer-utils"
 
 export function useTimer({ settings }: { settings: PomodoroSettings }) {
   const [timer, setTimer] = useState<TimerState>({
@@ -16,14 +17,6 @@ export function useTimer({ settings }: { settings: PomodoroSettings }) {
   })
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const { playNotificationSound } = useSound({ soundEnabled: settings.soundEnabled })
-
-  // Calculate duration of each session removing break time
-  const calculateSessionDuration = (hours: number, intervals: number, breakMinutes: number = settings.breakMinutes): number => {
-    const totalTimeMinutes = hours * 60
-    const totalBreakTime = (intervals - 1) * breakMinutes
-    const totalStudyTime = totalTimeMinutes - totalBreakTime
-    return (totalStudyTime * 60) / intervals
-  }
 
   const initializeTimer = () => {
     const sessionDuration = calculateSessionDuration(settings.studyHours, settings.intervals, settings.breakMinutes)

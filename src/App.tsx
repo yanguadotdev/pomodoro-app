@@ -4,7 +4,7 @@ import ClockAnimation from './components/ClockAnimation'
 import { useTimer, useSettings, useDocumentTitle } from './hooks'
 import Button from './components/Button'
 import RainEffect from './components/RainEffect'
-import PomodoroSettings from '@/components/PomodoroSettings'
+import PomodoroConfig from '@/components/PomodoroConfig'
 
 const PomodoroApp: React.FC = () => {
   const { settings } = useSettings()
@@ -42,7 +42,7 @@ const PomodoroApp: React.FC = () => {
           />
 
           <div className="absolute top-4 right-4 size-8 rounded-full">
-            <PomodoroSettings />
+            <PomodoroConfig />
           </div>
         </div>
       </div>

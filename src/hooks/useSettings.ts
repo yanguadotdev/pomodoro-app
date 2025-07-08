@@ -7,11 +7,11 @@ export function useSettings() {
         breakMinutes: 10,
         intervals: 2,
         soundEnabled: true,
-        autoStart: true
+        autoStart: false
     })
     const [showSettings, setShowSettings] = useState(false);
     const [tempSettings, setTempSettings] = useState<PomodoroSettings>(settings);
-
+    
     return {
         settings,
         setSettings,
