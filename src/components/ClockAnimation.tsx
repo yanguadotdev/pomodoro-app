@@ -1,13 +1,13 @@
-import { Check, Pause, Play, RotateCcw } from "lucide-react";
-import type { TimerState } from "../types";
-import Button from "./Button";
-import { useProgressCalculation } from "../hooks";
+import { Check, Pause, Play, RotateCcw } from "lucide-react"
+import type { TimerState } from "../types"
+import { useProgressCalculation } from "../hooks"
+import SpecialButton from "./SpecialButton"
 
 interface ClockAnimationProps {
-    timer: TimerState;
-    formatTime: (seconds: number) => string;
-    toggleTimer: () => void;
-    resetTimer: () => void;
+    timer: TimerState
+    formatTime: (seconds: number) => string
+    toggleTimer: () => void
+    resetTimer: () => void
 }
 
 export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
@@ -35,14 +35,14 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                             cy="140"
                             r={radius}
                             fill="transparent"
-                            stroke={timer.isBreak ? "#10B981" : "#8B5CF6"}
+                            stroke={timer.isBreak ? "#10B981" : "#ff6900"}
                             strokeWidth="8"
                             strokeLinecap="round"
                             strokeDasharray={strokeDasharray}
                             strokeDashoffset={strokeDashoffset}
                             className="transition-all duration-1000 ease-out"
                             style={{
-                                filter: `drop-shadow(0 0 10px ${timer.isBreak ? '#10B981' : '#8B5CF6'})`
+                                filter: `drop-shadow(0 0 10px ${timer.isBreak ? '#10B981' : '#ff6900'})`
                             }}
                         />
                     </svg>
@@ -57,10 +57,10 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                         ) : (
                             <>
                                 <div className="text-center mb-4">
-                                    <p className="text-white text-sm opacity-80">
+                                    <p className="text-white text-shadow-accent text-sm">
                                         {timer.isBreak ? 'Descanso' : 'Estudio'}
                                     </p>
-                                    <p className="text-white text-xs opacity-60">
+                                    <p className="text-white text-xs opacity-80 text-shadow-accent">
                                         Sesión {timer.currentInterval} de {timer.totalIntervals}
                                     </p>
                                 </div>
@@ -70,22 +70,26 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <Button
+                                    <SpecialButton
                                         onClick={toggleTimer}
+                                        className="bg-green-800 backdrop-blur-xs"
+                                        rounded
                                         variant="green"
                                     >
                                         {timer.isRunning
                                             ? <Pause className="size-7" />
                                             : <Play className="size-7" />
                                         }
-                                    </Button>
+                                    </SpecialButton>
 
-                                    <Button
+                                    <SpecialButton
                                         onClick={resetTimer}
+                                        className="bg-red-800 backdrop-blur-xs"
+                                        rounded
                                         variant="red"
                                     >
                                         <RotateCcw className="size-7" />
-                                    </Button>
+                                    </SpecialButton>
                                 </div>
                             </>
                         )}
