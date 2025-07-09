@@ -5,11 +5,19 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Switch } from "@/components/ui/switch"
 import { Slider } from "@/components/ui/slider"
-import { Label } from "@/components/ui/label"
+import { Toggle } from "@/components/ui/toggle"
 import { useAmbientSounds } from "@/context/ambientSoundContext"
-import { Volume2, VolumeX, Headphones } from "lucide-react"
+import { Headphones } from "lucide-react"
+import { CloudRain, FlameKindling, Waves, Bird } from "lucide-react"
+import { Label } from "./ui/label"
+
+const soundIcons = {
+    rain: CloudRain,
+    fire: FlameKindling,
+    water: Waves,
+    birds: Bird,
+}
 
 export default function AmbientSoundsModal() {
     const { sounds, toggleSound, setVolume, isModalOpen, setIsModalOpen } = useAmbientSounds()
@@ -28,43 +36,38 @@ export default function AmbientSoundsModal() {
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="space-y-6 py-4">
-                    {sounds.map((sound) => (
-                        <div key={sound.id} className="space-y-3">
-                            {/* Sound toggle */}
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor={sound.id} className="text-base font-medium">
-                                    {sound.name}
-                                </Label>
-                                <Switch
+                <div className="grid grid-cols-3 gap-8 gap-y-10">
+                    {sounds.map((sound) => {
+                        const Icon = soundIcons[sound.id]
+                        return (
+                            <div key={sound.id} className="flex flex-col items-center relative">
+                                {/* Sound toggle */}
+                                <Label htmlFor={sound.id} className="text-xs font-medium mb-1">{sound.name}</Label>
+                                <Toggle
                                     id={sound.id}
-                                    checked={sound.isActive}
-                                    onCheckedChange={() => toggleSound(sound.id)}
-                                />
+                                    pressed={sound.isActive}
+                                    onPressedChange={() => toggleSound(sound.id)}
+                                >
+                                    <Icon className="size-6" />
+                                </Toggle>
+                                {
+                                    sound.isActive && (
+                                        <Slider
+                                            value={[sound.volume]}
+                                            onValueChange={(value) => setVolume(sound.id, value[0])}
+                                            max={1}
+                                            min={0}
+                                            step={0.1}
+                                            className="absolute -bottom-4 inset-x-0 max-w-18 mx-auto"
+                                        />
+                                    )
+                                }
                             </div>
-
-                            {/* Volume control */}
-                            <div className="flex items-center space-x-3">
-                                <VolumeX className="w-4 h-4 text-gray-400" />
-                                <Slider
-                                    value={[sound.volume]}
-                                    onValueChange={(value) => setVolume(sound.id, value[0])}
-                                    max={1}
-                                    min={0}
-                                    step={0.1}
-                                    className="flex-1"
-                                    disabled={!sound.isActive}
-                                />
-                                <Volume2 className="w-4 h-4 text-gray-400" />
-                                <span className="text-sm text-gray-400 w-10">
-                                    {Math.round(sound.volume * 100)}%
-                                </span>
-                            </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
 
-                <div className="text-xs text-gray-400 mt-4">
+                <div className="text-xs text-gray-400 mt-8">
                     Los sonidos ambientales pueden ayudarte a mantener la concentración durante tus sesiones de estudio.
                 </div>
             </DialogContent>
