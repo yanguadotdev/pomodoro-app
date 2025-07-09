@@ -6,6 +6,7 @@ import Button from './components/Button'
 import RainEffect from './components/RainEffect'
 import PomodoroConfig from '@/components/PomodoroConfig'
 import AmbientSoundsModal from '@/components/AmbientSoundsModal'
+import { motion, AnimatePresence } from 'motion/react'
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -43,10 +44,35 @@ const PomodoroApp: React.FC = () => {
           />
 
           <div className="absolute top-4 right-4 size-8 rounded-full">
-            <PomodoroConfig />
+
+            <AnimatePresence>
+              {
+                showUI && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0 }}
+                  >
+                    <PomodoroConfig />
+                  </motion.div>
+                )
+              }
+            </AnimatePresence>
           </div>
           <div className="absolute top-4 left-4 size-8 rounded-full">
-            <AmbientSoundsModal />
+            <AnimatePresence>
+              {
+                showUI && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0 }}
+                  >
+                    <AmbientSoundsModal />
+                  </motion.div>
+                )
+              }
+            </AnimatePresence>
           </div>
         </div>
       </div>
