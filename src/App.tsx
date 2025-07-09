@@ -5,6 +5,8 @@ import { useTimer, useDocumentTitle } from './hooks'
 import Button from './components/Button'
 import RainEffect from './components/RainEffect'
 import PomodoroConfig from '@/components/PomodoroConfig'
+import AmbientSoundsModal from '@/components/AmbientSoundsModal'
+import { useAudioManager } from './hooks/useAudioManager'
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -12,6 +14,7 @@ const PomodoroApp: React.FC = () => {
   // CUSTOM HOOKS
   const { timer, formatTime, toggleTimer, resetTimer } = useTimer()
   useDocumentTitle({ timer, formatTime })
+  useAudioManager()
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -42,6 +45,9 @@ const PomodoroApp: React.FC = () => {
 
           <div className="absolute top-4 right-4 size-8 rounded-full">
             <PomodoroConfig />
+          </div>
+          <div className="absolute top-4 left-4 size-8 rounded-full">
+            <AmbientSoundsModal />
           </div>
         </div>
       </div>
