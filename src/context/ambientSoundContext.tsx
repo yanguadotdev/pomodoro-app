@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
-export type SoundType = 'rain' | 'fire' | 'water' | 'birds'
+export type SoundType = 'rain' | 'fire' | 'water' | 'birds' | 'coffee' | 'keyboard'
 
 export interface SoundConfig {
   id: SoundType
@@ -21,10 +21,12 @@ interface AmbientSoundsContextType {
 const AmbientSoundsContext = createContext<AmbientSoundsContextType | undefined>(undefined)
 
 const initialSounds: SoundConfig[] = [
-  { id: 'rain', name: 'Lluvia', file: '/sounds/rain.mp3', volume: 0.5, isActive: false },
+  { id: 'rain', name: 'Lluvia', file: '/sounds/rain.wav', volume: 0.5, isActive: false },
   { id: 'fire', name: 'Fuego', file: '/sounds/fire.mp3', volume: 0.5, isActive: false },
   { id: 'water', name: 'Agua', file: '/sounds/water.mp3', volume: 0.5, isActive: false },
   { id: 'birds', name: 'Pájaros', file: '/sounds/birds.mp3', volume: 0.5, isActive: false },
+  { id: 'coffee', name: 'Café', file: '/sounds/coffee.mp3', volume: 0.5, isActive: false },
+  { id: 'keyboard', name: 'Teclado', file: '/sounds/keyboard.mp3', volume: 0.5, isActive: false },
 ]
 
 export function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {

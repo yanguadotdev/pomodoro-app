@@ -8,7 +8,7 @@ import {
 import { Slider } from "@/components/ui/slider"
 import { Toggle } from "@/components/ui/toggle"
 import { useAmbientSounds } from "@/context/ambientSoundContext"
-import { Headphones } from "lucide-react"
+import { Coffee, Headphones, Keyboard } from "lucide-react"
 import { CloudRain, FlameKindling, Waves, Bird } from "lucide-react"
 import { Label } from "./ui/label"
 
@@ -17,6 +17,8 @@ const soundIcons = {
     fire: FlameKindling,
     water: Waves,
     birds: Bird,
+    coffee: Coffee,
+    keyboard: Keyboard,
 }
 
 export default function AmbientSoundsModal() {
