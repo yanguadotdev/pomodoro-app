@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { CloudRain } from 'lucide-react'
 import ClockAnimation from './components/ClockAnimation'
-import { useTimer, useDocumentTitle } from './hooks'
+import { useTimer, useDocumentTitle, useUIVisibility, useAudioManager } from './hooks'
 import Button from './components/Button'
 import RainEffect from './components/RainEffect'
 import PomodoroConfig from '@/components/PomodoroConfig'
 import AmbientSoundsModal from '@/components/AmbientSoundsModal'
-import { useAudioManager } from './hooks/useAudioManager'
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -15,6 +14,7 @@ const PomodoroApp: React.FC = () => {
   const { timer, formatTime, toggleTimer, resetTimer } = useTimer()
   useDocumentTitle({ timer, formatTime })
   useAudioManager()
+  const { showUI } = useUIVisibility(timer.isRunning)
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
@@ -28,7 +28,6 @@ const PomodoroApp: React.FC = () => {
 
       <Button
         onClick={() => setRainEnabled(!rainEnabled)}
-        variant={rainEnabled ? 'blue' : 'black'}
         className={`absolute border-b-2 top-6 right-6 z-30`}
       >
         <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />

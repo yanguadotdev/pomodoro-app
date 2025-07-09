@@ -7,7 +7,7 @@ export default function Button(props: ButtonProps) {
     return (
         <button
             {...rest}
-            className={`text-white bg-black/25 border active:scale-90 transition-transform duration-300 border-white/20 backdrop-blur-xs leading-none size-12 grid place-items-center rounded-full ${className}`}>
+            className={`text-white group bg-black/25 border active:scale-90 transition-transform duration-300 border-white/20 backdrop-blur-xs leading-none size-12 grid place-items-center rounded-full ${className}`}>
             {children}
         </button>
     )

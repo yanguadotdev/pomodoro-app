@@ -37,7 +37,7 @@ export default function PomodoroConfig() {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                     <Button>
-                        <SettingsIcon className="size-7 transition-transform duration-300" />
+                        <SettingsIcon className="size-7 transition-transform duration-300 group-hover:rotate-90" />
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
