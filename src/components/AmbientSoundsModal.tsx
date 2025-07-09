@@ -10,7 +10,8 @@ import { Toggle } from "@/components/ui/toggle"
 import { useAmbientSounds } from "@/context/ambientSoundContext"
 import { Coffee, Headphones, Keyboard } from "lucide-react"
 import { CloudRain, FlameKindling, Waves, Bird } from "lucide-react"
-import { Label } from "./ui/label"
+import { Label } from "@/components/ui/label"
+import Button from "@/components/Button"
 
 const soundIcons = {
     rain: CloudRain,
@@ -27,9 +28,9 @@ export default function AmbientSoundsModal() {
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-                <button className="text-white group">
+                <Button>
                     <Headphones className="size-7 transition-transform duration-300" />
-                </button>
+                </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-gray-900/95 border-gray-700 text-white">
                 <DialogHeader>

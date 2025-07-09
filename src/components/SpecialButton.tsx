@@ -17,12 +17,12 @@ export default function SpecialButton({ children, className, variant = 'orange',
     return (
         <button
             {...props}
-            className={cn(`relative inline-flex transition-all duration-300 active:translate-y-0.5 items-center justify-center px-8 py-2.5 overflow-hidden text-white bg-gray-800 group`, rounded ? 'rounded-full size-14 p-0' : 'w-full rounded-md', className)}
+            className={cn(`relative inline-flex transition-all duration-300 active:scale-90 items-center justify-center px-8 py-2.5 overflow-hidden text-white bg-gray-800 group`, rounded ? 'rounded-full size-14 p-0' : 'w-full rounded-md', className)}
         >
             {
                 !rounded && (
                     <span
-                        className={cn(`absolute w-0 h-0 transition-all duration-300 ease-out rounded-full group-hover:w-96 group-hover:h-56`, colorVariants[variant])}
+                        className={cn(`absolute w-0 h-0 transition-all duration-300 ease-out rounded-full group-hover:w-full group-hover:h-56`, colorVariants[variant])}
                     ></span>
                 )
             }

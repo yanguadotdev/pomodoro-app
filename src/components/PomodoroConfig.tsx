@@ -25,18 +25,20 @@ import { DialogClose } from "@radix-ui/react-dialog"
 import { ConfigContext, type ContextValueProps } from "@/context/configContext"
 import SpecialButton from "./SpecialButton"
 import { useSound } from "@/hooks/useSound"
+import Button from "@/components/Button"
+import { useMediaQuery } from "@/hooks"
 
 export default function PomodoroConfig() {
     const [open, setOpen] = useState(false)
-    const isDesktop = true
+    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     if (isDesktop) {
         return (
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <button className="text-white group">
-                        <SettingsIcon className="size-7 group-hover:rotate-90 transition-transform duration-300" />
-                    </button>
+                    <Button>
+                        <SettingsIcon className="size-7 transition-transform duration-300" />
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -51,15 +53,15 @@ export default function PomodoroConfig() {
     return (
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-                <button className="text-white group">
-                    <SettingsIcon className="size-6 group-hover:rotate-90 transition-transform duration-300" />
-                </button>
+                <Button>
+                    <SettingsIcon className="size-6 transition-transform duration-300" />
+                </Button>
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
                     <DrawerTitle>Configuración</DrawerTitle>
                 </DrawerHeader>
-                <EditStudyHours className="px-4" />
+                <EditStudyHours className="p-4" />
             </DrawerContent>
         </Drawer>
     )
