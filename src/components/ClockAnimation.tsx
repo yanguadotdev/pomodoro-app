@@ -1,7 +1,9 @@
-import { Check, Pause, Play, RotateCcw } from "lucide-react"
+import { Pause, Play, RotateCcw } from "lucide-react"
 import type { TimerState } from "../types"
 import { useProgressCalculation } from "../hooks"
 import SpecialButton from "./SpecialButton"
+import Lottie from "lottie-react"
+import completeSessionAnimation from "../../public/lotties/complete-session.json"
 
 interface ClockAnimationProps {
     timer: TimerState
@@ -51,8 +53,11 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         {timer.isCompleted ? (
                             <div className="text-center">
-                                <Check className="w-16 h-16 text-green-400 mx-auto mb-2" />
-                                <p className="text-white text-lg font-semibold">¡Completado!</p>
+                                <Lottie
+                                    className="size-full"
+                                    animationData={completeSessionAnimation}
+                                    loop={false}
+                                />
                             </div>
                         ) : (
                             <>
