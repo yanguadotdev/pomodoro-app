@@ -120,7 +120,7 @@ function EditStudyHours({ className }: React.ComponentProps<"div">) {
                 />
             </div>
 
-            <div className="text-sm text-white/85 bg-black/50 p-3 rounded-lg">
+            <div className="text-sm text-white/85 bg-black/50 p-3 rounded-lg border-gray-700 border">
                 <p>Cada sesión durará: <strong>{Math.floor(calculateSessionDuration(tempSettings.studyHours, tempSettings.intervals, tempSettings.breakMinutes) / 60)} minutos</strong></p>
             </div>
 
