@@ -65,10 +65,7 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <AnimatePresence>
                             {timer.isCompleted ? (
-                                <motion.div
-                                    initial={{ opacity: 0, scale: 0 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0 }}
+                                <div
                                     className="text-center -mt-12"
                                 >
                                     <Lottie
@@ -77,7 +74,7 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                                         loop={false}
                                     />
                                     <p className="text-white text-lg font-semibold -mt-12">¡Completado!</p>
-                                </motion.div>
+                                </div>
                             ) : (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0 }}
