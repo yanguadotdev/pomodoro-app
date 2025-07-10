@@ -105,7 +105,7 @@ export function useTimer() {
             }
           }
         })
-      }, 1000)
+      }, 10)
     } else {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
