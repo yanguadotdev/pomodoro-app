@@ -3,7 +3,7 @@ import type { TimerState } from "../types"
 import { useProgressCalculation } from "../hooks"
 import SpecialButton from "./SpecialButton"
 import Lottie from "lottie-react"
-import completeSessionAnimation from "../../public/lotties/complete-session.json"
+import completeSessionAnimation from "@/assets/lotties/complete-session.json"
 import { useEffect } from "react"
 import { AnimatePresence, motion } from "motion/react"
 

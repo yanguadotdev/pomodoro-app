@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 export type SoundType = 'rain' | 'fire' | 'water' | 'birds' | 'coffee' | 'keyboard'
 
@@ -32,22 +32,6 @@ const initialSounds: SoundConfig[] = [
 export function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {
   const [sounds, setSounds] = useState<SoundConfig[]>(initialSounds)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  useEffect(() => {
-    const savedConfig = localStorage.getItem('ambientSoundsConfig')
-    if (savedConfig) {
-      try {
-        const parsedConfig = JSON.parse(savedConfig)
-        setSounds(parsedConfig)
-      } catch (error) {
-        console.error('Error loading saved sounds config:', error)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('ambientSoundsConfig', JSON.stringify(sounds))
-  }, [sounds])
 
   const toggleSound = (soundId: SoundType) => {
     setSounds(prevSounds =>
