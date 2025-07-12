@@ -7,7 +7,7 @@ interface ConfigBackgroundContextValue {
     totalImages: number
 }
 
-const TOTAL_IMAGES = 2
+const TOTAL_IMAGES = 3
 const ConfigBackgroundContext = createContext<ConfigBackgroundContextValue | null>(null)
 
 const loadIndex = () => {

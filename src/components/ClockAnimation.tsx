@@ -38,8 +38,8 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                             cx="140"
                             cy="140"
                             r={radius}
-                            fill="transparent"
-                            stroke="rgba(255, 255, 255, .2)"
+                            fill="rgba(0, 0, 0, .5)"
+                            stroke="rgba(255, 255, 255, .25)"
                             strokeWidth="8"
                         />
 

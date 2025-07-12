@@ -34,10 +34,10 @@ export default function BackgroundSelector() {
                     key={index}
                     onClick={() => setSelectedIndex(index)}
                     className={cn(
-                        "rounded-md overflow-hidden border-2 transition-all",
+                        "rounded-md overflow-hidden border transition-all",
                         selectedIndex === index
-                            ? "border-purple-500 ring-2 ring-purple-400"
-                            : "border-transparent hover:border-white/40"
+                            ? "border-orange-500 ring-1 ring-orange-400"
+                            : "border-orange-400/40"
                     )}
                 >
                     <img
@@ -60,9 +60,12 @@ export default function BackgroundSelector() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Seleccionar fondo</DialogTitle>
+                        <DialogTitle className="text-center">Seleccionar fondo</DialogTitle>
                     </DialogHeader>
                     <Grid />
+                    <p className="text-xs text-gray-400 mt-8 text-balance text-center">
+                        <span className="font-semibold">Consejo:</span> Asegúrate de subir una imagen con buen contraste para que el contenido sea legible. Fondos muy claros pueden dificultar la visibilidad del temporizador y otros elementos.
+                    </p>
                 </DialogContent>
             </Dialog>
         )
@@ -76,12 +79,15 @@ export default function BackgroundSelector() {
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
-                <DrawerHeader className="text-left">
+                <DrawerHeader className="text-center">
                     <DrawerTitle>Seleccionar fondo</DrawerTitle>
                 </DrawerHeader>
                 <div className="p-4">
                     <Grid />
                 </div>
+                <p className="text-xs text-gray-400 mt-8 text-balance text-center">
+                    <span className="font-semibold">Consejo:</span> Asegúrate de subir una imagen con buen contraste para que el contenido sea legible. Fondos muy claros pueden dificultar la visibilidad del temporizador y otros elementos.
+                </p>
             </DrawerContent>
         </Drawer>
     )

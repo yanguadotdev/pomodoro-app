@@ -26,6 +26,8 @@ const PomodoroApp: React.FC = () => {
         backgroundImage: `url(${imageUrl})`
       }}
     >
+      <div className="absolute inset-0 bg-black/10 backdrop-brightness-85 mix-blend-overlay z-10 pointer-events-none" />
+
       {rainEnabled && (
         <RainEffect rainEnabled={rainEnabled} />
       )}
