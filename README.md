@@ -1,53 +1,57 @@
-# 🍅 Pomodoro Timer
+# 🌿 Pomodoro Natural Focus
 
-> 🌧️ Modern Pomodoro Timer with ambient rain effects and customizable study sessions
+Una app pensada para quienes disfrutan concentrarse rodeados de sonidos naturales y una atmósfera visual tranquila. Esta herramienta combina un temporizador Pomodoro configurable con una experiencia sensorial inmersiva para ayudarte a estudiar o trabajar con más foco y calma.
 
-## ✨ Features
+---
 
-- 🍅 **Pomodoro Technique**: Customizable study and break intervals
-- 🌧️ **Ambient Rain Effects**: Toggle beautiful rain animations for focus
-- ⏰ **Smart Timer**: Automatic session transitions with visual progress
-- 🎨 **Beautiful UI**: Glass-morphism design with smooth animations
-- 🔊 **Sound Notifications**: Audio alerts for session completions
-- 📱 **Responsive Design**: Works perfectly on all devices
-- 🎯 **Custom Hooks**: Clean, reusable React architecture
-- 📊 **Progress Tracking**: Visual circular progress indicator
+## 🚀 Tecnologías Utilizadas
 
-### Installation
+* ⚛️ **React + Vite**
+* 🧠 **TypeScript**
+* 💨 **TailwindCSS**
+* 🎬 **Framer Motion** (animaciones fluidas)
+* 🧱 **shadcn/ui** (con componentes personalizados)
+* 🎞️ **Lottie animations**
 
-```bash
-# Clone the repository
-git clone https://github.com/yanguadotdev/pomodoro-app.git
+---
 
-# Navigate to project directory
-cd pomodoro-app
+## 🎯 Características Principales
 
-# Install dependencies
-npm install
+### 🕒 Configura tus sesiones Pomodoro
 
-# Start development server
-npm run dev
-```
+* Elige la duración de enfoque (ej. 25 min)
+* Define cuántos intervalos deseas completar
+* Ajusta el tiempo de descanso por intervalo
 
-Open [http://localhost:5173](http://localhost:5173) to view it in your browser 🎉
+### 🎧 Sonidos naturales de fondo
 
-## 🛠️ Built With
+* Selecciona sonidos como lluvia, bosque, fuego o pájaros
+* Controla el volumen de cada uno
+* Activa o desactiva el efecto visual de lluvia
 
-- **React 19** - UI Library
-- **TypeScript** - Type Safety
-- **Tailwind CSS** - Styling
-- **Vite** - Build Tool
-- **Lucide React** - Beautiful Icons
+### 🖼️ Personalización visual
 
-## 🎯 Usage
+* Cambia el fondo de pantalla eligiendo entre varias opciones inspiradas en ambientes cálidos y tranquilos
 
-1. **⚙️ Configure Settings**: Set your preferred study duration, break time, and intervals
-2. **🌧️ Toggle Rain**: Click the rain button to enable/disable ambient effects
-3. **▶️ Start Timer**: Click the play button to begin your Pomodoro session
-4. **📊 Track Progress**: Watch the circular progress indicator as time counts down
-5. **🔔 Get Notified**: Receive audio alerts when sessions complete
+### 🛠️ Detalles inteligentes
 
-## 🙏 Acknowledgments
+* Botones se ocultan mientras el temporizador está activo o tras 5 segundos de inactividad para mantener el enfoque visual
+* "Auto start": activa esta opción para iniciar automáticamente los descansos y las siguientes sesiones
 
-- 🍅 Inspired by the Pomodoro Technique by Francesco Cirillo
-- 🌧️ Rain effects inspired by lo-fi study environments
+### ✨ Experiencia minimalista
+
+* Animaciones suaves y elegantes con Framer Motion
+* UI sobria y limpia con componentes de shadcn adaptados para esta app
+* Lottie animations para darle vida a las transiciones y estados
+
+---
+
+## 🤝 Contribuciones Bienvenidas
+
+Esta app nació de una necesidad personal: concentrarme mejor escuchando sonidos de la naturaleza mientras estudio o trabajo.
+
+Si tienes ideas, mejoras o simplemente quieres colaborar, ¡estás más que invitado a enviar un pull request!
+
+> Código limpio, UI pensada con amor, y naturaleza como aliada.
+
+---
