@@ -23,9 +23,9 @@ import { ImageIcon } from "lucide-react"
 export default function BackgroundSelector() {
     const isDesktop = useMediaQuery("(min-width: 768px)")
     const [open, setOpen] = useState(false)
-    const { selectedIndex, setSelectedIndex, totalImages } = useConfigBackground()
+    const { selectedIndex, setSelectedIndex, totalImages, imageUrls } = useConfigBackground()
 
-    const thumbnails = Array.from({ length: totalImages }, (_, i) => i + 1)
+    const thumbnails = Array.from({ length: totalImages }, (_, i) => i)
 
     const Grid = () => (
         <div className="grid grid-cols-3 gap-3 mt-4">
@@ -41,7 +41,7 @@ export default function BackgroundSelector() {
                     )}
                 >
                     <img
-                        src={`/backgrounds/image-${index.toString().padStart(2, '0')}.webp`}
+                        src={imageUrls[index]}
                         alt={`Fondo ${index}`}
                         className="object-cover w-full h-20"
                     />
