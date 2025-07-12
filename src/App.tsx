@@ -23,11 +23,9 @@ const PomodoroApp: React.FC = () => {
   return (
     <div className="min-h-screen relative overflow-hidden bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: `url(${imageUrl})`
+        backgroundImage: `url(${imageUrl})`,
       }}
     >
-      <div className="absolute inset-0 bg-black/10 backdrop-brightness-85 mix-blend-overlay z-10 pointer-events-none" />
-
       {rainEnabled && (
         <RainEffect rainEnabled={rainEnabled} />
       )}

@@ -43,7 +43,7 @@ export default function BackgroundSelector() {
                     <img
                         src={imageUrls[index]}
                         alt={`Fondo ${index}`}
-                        className="object-cover w-full h-20"
+                        className="object-cover w-full h-20 transition-transform duration-300 hover:transform-[scale(1.2)_rotate(10deg)]"
                     />
                 </button>
             ))}
