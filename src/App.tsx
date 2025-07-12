@@ -30,13 +30,6 @@ const PomodoroApp: React.FC = () => {
         <RainEffect rainEnabled={rainEnabled} />
       )}
 
-      <Button
-        onClick={() => setRainEnabled(!rainEnabled)}
-        className={`absolute border-b-2 top-6 right-6 z-30`}
-      >
-        <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
-      </Button>
-
       <div className="relative z-20 min-h-screen flex items-center justify-center p-4">
         <div className="p-8 w-full max-w-md relative">
           <ClockAnimation
@@ -93,6 +86,26 @@ const PomodoroApp: React.FC = () => {
               }
             </AnimatePresence>
           </div>
+          <div className="absolute bottom-4 right-4 size-8 rounded-full">
+            <AnimatePresence>
+              {
+                showUI && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0 }}
+                  >
+                    <Button
+                      onClick={() => setRainEnabled(!rainEnabled)}
+                    >
+                      <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
+                    </Button>
+                  </motion.div>
+                )
+              }
+            </AnimatePresence>
+          </div>
+
         </div>
       </div>
     </div>
