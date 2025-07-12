@@ -1,4 +1,5 @@
 # 🌿 Pomodoro Natural Focus
+![Screenshot](https://focus-pomodoro.vercel.app/og.jpg)
 
 Una app pensada para quienes disfrutan concentrarse rodeados de sonidos naturales y una atmósfera visual tranquila. Esta herramienta combina un temporizador Pomodoro configurable con una experiencia sensorial inmersiva para ayudarte a estudiar o trabajar con más foco y calma.
 
@@ -51,7 +52,5 @@ Una app pensada para quienes disfrutan concentrarse rodeados de sonidos naturale
 Esta app nació de una necesidad personal: concentrarme mejor escuchando sonidos de la naturaleza mientras estudio o trabajo.
 
 Si tienes ideas, mejoras o simplemente quieres colaborar, ¡estás más que invitado a enviar un pull request!
-
-> Código limpio, UI pensada con amor, y naturaleza como aliada.
 
 ---
