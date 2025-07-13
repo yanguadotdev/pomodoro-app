@@ -13,7 +13,7 @@ import { Coffee, Headphones, Keyboard } from "lucide-react"
 import { CloudRain, FlameKindling, Waves, Bird } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import Button from "@/components/Button"
-import { useMediaQuery } from "@/hooks"
+import { useAudioManager, useMediaQuery } from "@/hooks"
 
 const soundIcons = {
     rain: CloudRain,
@@ -27,6 +27,8 @@ const soundIcons = {
 export default function AmbientSoundsModal() {
     const { sounds, toggleSound, setVolume, isModalOpen, setIsModalOpen } = useAmbientSounds()
     const isDesktop = useMediaQuery("(min-width: 768px)")
+    useAudioManager()
+
 
     if (isDesktop) {
         return (
