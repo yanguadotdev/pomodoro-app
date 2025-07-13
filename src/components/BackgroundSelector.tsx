@@ -31,13 +31,13 @@ export default function BackgroundSelector() {
     const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {
-            // Validar que sea una imagen
+            // Validate file type is an image
             if (!file.type.startsWith('image/')) {
                 alert('Por favor, selecciona solo archivos de imagen.')
                 return
             }
 
-            // Validar tamaño (máximo 5MB)
+            // Validate file size is less than 5MB
             if (file.size > 5 * 1024 * 1024) {
                 alert('El archivo es demasiado grande. El tamaño máximo es 5MB.')
                 return
@@ -47,8 +47,8 @@ export default function BackgroundSelector() {
             reader.onload = (e) => {
                 const imageUrl = e.target?.result as string
                 setCustomImage(imageUrl)
-                // Seleccionar automáticamente la imagen subida
-                const newIndex = totalImages - (customImage ? 0 : 1)
+                // Automatically select the uploaded image
+                const newIndex = totalImages
                 setSelectedIndex(newIndex)
             }
             reader.readAsDataURL(file)
@@ -57,51 +57,49 @@ export default function BackgroundSelector() {
 
     const handleRemoveCustomImage = () => {
         setCustomImage(null)
-        // Si la imagen personalizada estaba seleccionada, cambiar al primer fondo por defecto
+        // If the custom image was selected, change to the first default background
         if (customImage && selectedIndex === totalImages - 1) {
             setSelectedIndex(0)
         }
     }
 
     const Grid = () => (
-        <div className="space-y-4">
-            <div className="grid grid-cols-3 gap-3">
-                {thumbnails.map(index => {
-                    const isCustomImage = customImage && index === totalImages - 1
-                    
-                    return (
-                        <div key={index} className="relative">
-                            <button
-                                onClick={() => setSelectedIndex(index)}
-                                className={cn(
-                                    "rounded-md overflow-hidden border transition-all w-full",
-                                    selectedIndex === index
-                                        ? "border-orange-500 ring-1 ring-orange-400"
-                                        : "border-orange-400/40"
-                                )}
-                            >
-                                <img
-                                    src={imageUrls[index]}
-                                    alt={isCustomImage ? "Imagen personalizada" : `Fondo ${index}`}
-                                    className="object-cover w-full h-20 transition-transform duration-300 hover:transform-[scale(1.2)_rotate(10deg)]"
-                                />
-                            </button>
-                            {isCustomImage && (
-                                <button
-                                    onClick={handleRemoveCustomImage}
-                                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
-                                    title="Eliminar imagen personalizada"
-                                >
-                                    <X className="size-3" />
-                                </button>
+        <div className="grid grid-cols-3 gap-3 mt-4">
+            {thumbnails.map(index => {
+                const isCustomImage = customImage && index === totalImages - 1
+                
+                return (
+                    <div key={index} className="relative">
+                        <button
+                            onClick={() => setSelectedIndex(index)}
+                            className={cn(
+                                "rounded-md overflow-hidden border transition-all w-full",
+                                selectedIndex === index
+                                    ? "border-orange-500 ring-1 ring-orange-400"
+                                    : "border-orange-400/40"
                             )}
-                        </div>
-                    )
-                })}
-            </div>
-
-            {/* Botón para subir imagen personalizada */}
-            <div className="flex justify-center">
+                        >
+                            <img
+                                src={imageUrls[index]}
+                                alt={isCustomImage ? "Imagen personalizada" : `Fondo ${index}`}
+                                className="object-cover w-full h-20 transition-transform duration-300 hover:transform-[scale(1.2)_rotate(5deg)]"
+                            />
+                        </button>
+                        {isCustomImage && (
+                            <button
+                                onClick={handleRemoveCustomImage}
+                                className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-colors"
+                                title="Eliminar imagen personalizada"
+                            >
+                                <X className="size-3" />
+                            </button>
+                        )}
+                    </div>
+                )
+            })}
+            
+            {/* Botón para subir imagen personalizada como elemento de la grid */}
+            <div className="relative">
                 <input
                     ref={fileInputRef}
                     type="file"
@@ -111,10 +109,10 @@ export default function BackgroundSelector() {
                 />
                 <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex items-center gap-2 px-4 py-2 border border-orange-400/40 rounded-md hover:border-orange-500 transition-colors text-sm"
+                    className="w-full h-20 border border-orange-400/40 rounded-md hover:border-orange-500 transition-colors flex items-center justify-center bg-black/20 hover:bg-black/30"
+                    title="Subir imagen personalizada"
                 >
-                    <Upload className="size-4" />
-                    Subir imagen personalizada
+                    <Upload className="size-6 text-orange-400" />
                 </button>
             </div>
         </div>
