@@ -1,11 +1,9 @@
-import { useState, useMemo, useCallback, lazy } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import ClockAnimation from '@/components/ClockAnimation'
 import { useTimer, useDocumentTitle, useUIVisibility } from '@/hooks'
 import RainEffect from '@/components/RainEffect'
-import { AnimatePresence } from 'motion/react'
 import { useConfigBackground } from '@/context/configBackgroundContext'
-
-const UIControls = lazy(() => import('@/components/UIControls'))
+import UIControls from '@/components/UIControls'
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -41,13 +39,11 @@ const PomodoroApp: React.FC = () => {
             toggleTimer={toggleTimer}
             resetTimer={resetTimer}
           />
-          <AnimatePresence>
-            <UIControls
-              showUI={showUI}
-              rainEnabled={rainEnabled}
-              setRainEnabled={handleRainToggle}
-            />
-          </AnimatePresence>
+          <UIControls
+            showUI={showUI}
+            rainEnabled={rainEnabled}
+            setRainEnabled={handleRainToggle}
+          />
         </div>
       </div>
     </div>
