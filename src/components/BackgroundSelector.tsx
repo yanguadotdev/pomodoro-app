@@ -18,6 +18,7 @@ import { useMediaQuery } from "@/hooks"
 import { useConfigBackground } from "@/context/configBackgroundContext"
 import { cn } from "@/lib/utils"
 import Button from "@/components/Button"
+import { motion } from "motion/react"
 import { ImageIcon, Upload, X } from "lucide-react"
 
 export default function BackgroundSelector() {
@@ -67,9 +68,16 @@ export default function BackgroundSelector() {
         <div className="grid grid-cols-3 gap-3 mt-4">
             {thumbnails.map(index => {
                 const isCustomImage = customImage && index === totalImages - 1
-                
+
                 return (
-                    <div key={index} className="relative">
+                    <motion.div
+                        key={index}
+                        className="relative"
+                        initial={{ opacity: 0, scaleX: 0 }}
+                        animate={{ opacity: 1, scaleX: 1 }}
+                        exit={{ opacity: 0, scaleX: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
                         <button
                             onClick={() => setSelectedIndex(index)}
                             className={cn(
@@ -94,10 +102,10 @@ export default function BackgroundSelector() {
                                 <X className="size-3" />
                             </button>
                         )}
-                    </div>
+                    </motion.div>
                 )
             })}
-            
+
             {/* Botón para subir imagen personalizada como elemento de la grid */}
             <div className="relative">
                 <input
