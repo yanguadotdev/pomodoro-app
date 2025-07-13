@@ -40,7 +40,7 @@ export default function PomodoroConfig() {
                         <SettingsIcon className="size-7 transition-transform duration-300 group-hover:rotate-90" />
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="md:max-w-[425px]">
                     <DialogHeader>
                         <DialogTitle>Configuración</DialogTitle>
                     </DialogHeader>

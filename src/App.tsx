@@ -1,66 +1,12 @@
-import { useState, lazy, Suspense, useMemo, useCallback, memo } from 'react'
-import { CloudRain } from 'lucide-react'
+import { useState, useMemo, useCallback, lazy, Suspense } from 'react'
 import ClockAnimation from '@/components/ClockAnimation'
 import { useTimer, useDocumentTitle, useUIVisibility } from '@/hooks'
-import Button from '@/components/Button'
 import RainEffect from '@/components/RainEffect'
-import { motion, AnimatePresence } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import { useConfigBackground } from '@/context/configBackgroundContext'
 
-const PomodoroConfig = lazy(() => import('@/components/PomodoroConfig'))
-const AmbientSoundsModal = lazy(() => import('@/components/AmbientSoundsModal'))
-const BackgroundSelector = lazy(() => import('@/components/BackgroundSelector'))
-
-const AbsoluteButton = memo(({ children }: { children: React.ReactNode }) => {
-  return (
-    <Suspense fallback={<LoadingSpinner />}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0 }}
-        className="absolute inset-0"
-      >
-        {children}
-      </motion.div>
-    </Suspense>
-  )
-})
-const LoadingSpinner = () => (
-  <div className="size-8 rounded-full bg-gray-600/20 animate-pulse" />
-)
-
-const UIControls = memo(({ rainEnabled, setRainEnabled }: { rainEnabled: boolean, setRainEnabled: () => void }) => {
-  return (
-    <>
-      <div className="absolute top-4 right-4 size-8 rounded-full">
-        <AbsoluteButton>
-          <PomodoroConfig />
-        </AbsoluteButton>
-      </div>
-
-      <div className="absolute top-4 left-4 size-8 rounded-full">
-        <AbsoluteButton>
-          <AmbientSoundsModal />
-        </AbsoluteButton>
-      </div>
-
-      <div className="absolute bottom-4 left-4 size-8 rounded-full">
-        <AbsoluteButton>
-          <BackgroundSelector />
-        </AbsoluteButton>
-      </div>
-
-      <div className="absolute bottom-4 right-4 size-8 rounded-full">
-        <AbsoluteButton>
-          <Button onClick={setRainEnabled}>
-            <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
-          </Button>
-        </AbsoluteButton>
-      </div>
-    </>
-  )
-})
-
+const UIControls = lazy(() => import('@/components/UIControls'))
+const AmbientSoundsProvider = lazy(() => import('@/context/ambientSoundContext'))
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -96,15 +42,17 @@ const PomodoroApp: React.FC = () => {
             toggleTimer={toggleTimer}
             resetTimer={resetTimer}
           />
-
-          <AnimatePresence>
-            {showUI && (
-              <UIControls
-                rainEnabled={rainEnabled}
-                setRainEnabled={handleRainToggle}
-              />
-            )}
-          </AnimatePresence>
+          <Suspense fallback={null}>
+            <AmbientSoundsProvider>
+              <AnimatePresence>
+                <UIControls
+                  showUI={showUI}
+                  rainEnabled={rainEnabled}
+                  setRainEnabled={handleRainToggle}
+                />
+              </AnimatePresence>
+            </AmbientSoundsProvider>
+          </Suspense>
         </div>
       </div>
     </div>

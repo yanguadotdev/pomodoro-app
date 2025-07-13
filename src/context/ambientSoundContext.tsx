@@ -14,8 +14,6 @@ interface AmbientSoundsContextType {
   sounds: SoundConfig[]
   toggleSound: (soundId: SoundType) => void
   setVolume: (soundId: SoundType, volume: number) => void
-  isModalOpen: boolean
-  setIsModalOpen: (isOpen: boolean) => void
 }
 
 const AmbientSoundsContext = createContext<AmbientSoundsContextType | undefined>(undefined)
@@ -29,9 +27,8 @@ const initialSounds: SoundConfig[] = [
   { id: 'keyboard', name: 'Teclado', file: '/sounds/keyboard.mp3', volume: 0.5, isActive: false },
 ]
 
-export function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {
+export default function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {
   const [sounds, setSounds] = useState<SoundConfig[]>(initialSounds)
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const toggleSound = (soundId: SoundType) => {
     setSounds(prevSounds =>
@@ -59,8 +56,6 @@ export function AmbientSoundsProvider({ children }: { children: React.ReactNode 
         sounds,
         toggleSound,
         setVolume,
-        isModalOpen,
-        setIsModalOpen,
       }}
     >
       {children}
