@@ -25,3 +25,13 @@ export interface TimerState {
   completedSessions: number;
   totalStudyTime: number;
 }
+
+export type SoundType = 'rain' | 'fire' | 'water' | 'birds' | 'coffee' | 'keyboard'
+
+export interface SoundConfig {
+  id: SoundType
+  name: string
+  file: string
+  volume: number
+  isActive: boolean
+}

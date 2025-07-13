@@ -1,8 +1,19 @@
-import { useEffect, useRef } from 'react'
-import { useAmbientSounds, type SoundType } from '@/context/ambientSoundContext'
+import { useEffect, useRef, useState } from 'react'
+import type { SoundConfig, SoundType } from '@/types'
+
+
+const initialSounds: SoundConfig[] = [
+    { id: 'rain', name: 'Lluvia', file: '/sounds/rain.wav', volume: 0.5, isActive: false },
+    { id: 'fire', name: 'Fuego', file: '/sounds/fire.mp3', volume: 0.5, isActive: false },
+    { id: 'water', name: 'Agua', file: '/sounds/water.mp3', volume: 0.5, isActive: false },
+    { id: 'birds', name: 'Pájaros', file: '/sounds/birds.mp3', volume: 0.5, isActive: false },
+    { id: 'coffee', name: 'Café', file: '/sounds/coffee.mp3', volume: 0.5, isActive: false },
+    { id: 'keyboard', name: 'Teclado', file: '/sounds/keyboard.mp3', volume: 0.5, isActive: false },
+]
 
 export const useAudioManager = () => {
-    const { sounds } = useAmbientSounds()
+    const [sounds, setSounds] = useState<SoundConfig[]>(initialSounds)
+
     const audioRefs = useRef<{ [key in SoundType]?: HTMLAudioElement }>({})
 
     useEffect(() => {
@@ -64,5 +75,7 @@ export const useAudioManager = () => {
     return {
         pauseAllSounds,
         resumeActiveSounds,
+        sounds,
+        setSounds
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, lazy, Suspense } from 'react'
+import { useState, useMemo, useCallback, lazy } from 'react'
 import ClockAnimation from '@/components/ClockAnimation'
 import { useTimer, useDocumentTitle, useUIVisibility } from '@/hooks'
 import RainEffect from '@/components/RainEffect'
@@ -6,7 +6,6 @@ import { AnimatePresence } from 'motion/react'
 import { useConfigBackground } from '@/context/configBackgroundContext'
 
 const UIControls = lazy(() => import('@/components/UIControls'))
-const AmbientSoundsProvider = lazy(() => import('@/context/ambientSoundContext'))
 
 const PomodoroApp: React.FC = () => {
   const [rainEnabled, setRainEnabled] = useState(true)
@@ -42,17 +41,13 @@ const PomodoroApp: React.FC = () => {
             toggleTimer={toggleTimer}
             resetTimer={resetTimer}
           />
-          <Suspense fallback={null}>
-            <AmbientSoundsProvider>
-              <AnimatePresence>
-                <UIControls
-                  showUI={showUI}
-                  rainEnabled={rainEnabled}
-                  setRainEnabled={handleRainToggle}
-                />
-              </AnimatePresence>
-            </AmbientSoundsProvider>
-          </Suspense>
+          <AnimatePresence>
+            <UIControls
+              showUI={showUI}
+              rainEnabled={rainEnabled}
+              setRainEnabled={handleRainToggle}
+            />
+          </AnimatePresence>
         </div>
       </div>
     </div>

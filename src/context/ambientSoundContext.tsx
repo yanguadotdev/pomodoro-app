@@ -1,14 +1,6 @@
-import { createContext, useContext, useState } from 'react'
-
-export type SoundType = 'rain' | 'fire' | 'water' | 'birds' | 'coffee' | 'keyboard'
-
-export interface SoundConfig {
-  id: SoundType
-  name: string
-  file: string
-  volume: number
-  isActive: boolean
-}
+import { useAudioManager } from '@/hooks'
+import type { SoundConfig, SoundType } from '@/types'
+import { createContext, useContext } from 'react'
 
 interface AmbientSoundsContextType {
   sounds: SoundConfig[]
@@ -18,17 +10,9 @@ interface AmbientSoundsContextType {
 
 const AmbientSoundsContext = createContext<AmbientSoundsContextType | undefined>(undefined)
 
-const initialSounds: SoundConfig[] = [
-  { id: 'rain', name: 'Lluvia', file: '/sounds/rain.wav', volume: 0.5, isActive: false },
-  { id: 'fire', name: 'Fuego', file: '/sounds/fire.mp3', volume: 0.5, isActive: false },
-  { id: 'water', name: 'Agua', file: '/sounds/water.mp3', volume: 0.5, isActive: false },
-  { id: 'birds', name: 'Pájaros', file: '/sounds/birds.mp3', volume: 0.5, isActive: false },
-  { id: 'coffee', name: 'Café', file: '/sounds/coffee.mp3', volume: 0.5, isActive: false },
-  { id: 'keyboard', name: 'Teclado', file: '/sounds/keyboard.mp3', volume: 0.5, isActive: false },
-]
 
 export default function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {
-  const [sounds, setSounds] = useState<SoundConfig[]>(initialSounds)
+  const { sounds, setSounds } = useAudioManager()
 
   const toggleSound = (soundId: SoundType) => {
     setSounds(prevSounds =>
