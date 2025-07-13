@@ -71,7 +71,6 @@ const PomodoroApp: React.FC = () => {
   useDocumentTitle({ timer, formatTime })
   const { showUI } = useUIVisibility(timer.isRunning)
 
-  // Memoización del estilo de background
   const backgroundStyle = useMemo(() => ({
     backgroundImage: `url(${imageUrl})`,
   }), [imageUrl])
