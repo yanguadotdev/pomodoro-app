@@ -31,27 +31,36 @@ export const useAudioManager = () => {
         }
     }, [])
 
-    // Volume
-    useEffect(() => {
-        sounds.forEach(({ id, volume }) => {
-            const audio = audioRefs.current[id]
-            if (audio) audio.volume = volume
-        })
-    }, [sounds])
+    const toggleSound = (soundId: SoundType) => {
+        const audio = audioRefs.current[soundId]
+        if (!audio) return
+        const isActive = audioRefs.current[soundId]?.paused
+        if (isActive) {
+            audio.play().catch(e => console.error(`Error playing ${soundId}`, e))
+        } else {
+            audio.pause()
+        }
+        setSounds(prevSounds =>
+            prevSounds.map(sound =>
+                sound.id === soundId
+                    ? { ...sound, isActive: !sound.isActive }
+                    : sound
+            )
+        )
+    }
 
-    // Play/Pause
-    useEffect(() => {
-        sounds.forEach(({ id, isActive }) => {
-            const audio = audioRefs.current[id]
-            if (!audio) return
-
-            if (isActive) {
-                audio.play().catch(e => console.error(`Error playing ${id}`, e))
-            } else {
-                audio.pause()
-            }
-        })
-    }, [sounds])
+    const setVolume = (soundId: SoundType, volume: number) => {
+        const audio = audioRefs.current[soundId]
+        if (!audio) return
+        audio.volume = volume
+        setSounds(prevSounds =>
+            prevSounds.map(sound =>
+                sound.id === soundId
+                    ? { ...sound, volume }
+                    : sound
+            )
+        )
+    }
 
     const pauseAllSounds = () => {
         Object.values(audioRefs.current).forEach(audio => audio?.pause())
@@ -68,7 +77,8 @@ export const useAudioManager = () => {
 
     return {
         sounds,
-        setSounds,
+        toggleSound,
+        setVolume,
         pauseAllSounds,
         resumeActiveSounds
     }

@@ -12,27 +12,7 @@ const AmbientSoundsContext = createContext<AmbientSoundsContextType | undefined>
 
 
 export default function AmbientSoundsProvider({ children }: { children: React.ReactNode }) {
-  const { sounds, setSounds } = useAudioManager()
-
-  const toggleSound = (soundId: SoundType) => {
-    setSounds(prevSounds =>
-      prevSounds.map(sound =>
-        sound.id === soundId
-          ? { ...sound, isActive: !sound.isActive }
-          : sound
-      )
-    )
-  }
-
-  const setVolume = (soundId: SoundType, volume: number) => {
-    setSounds(prevSounds =>
-      prevSounds.map(sound =>
-        sound.id === soundId
-          ? { ...sound, volume }
-          : sound
-      )
-    )
-  }
+  const { sounds, toggleSound, setVolume } = useAudioManager()
 
   return (
     <AmbientSoundsContext.Provider
