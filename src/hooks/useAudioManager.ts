@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SoundConfig, SoundType } from '@/types'
 
-
 const initialSounds: SoundConfig[] = [
     { id: 'rain', name: 'Lluvia', file: '/sounds/rain.wav', volume: 0.5, isActive: false },
     { id: 'fire', name: 'Fuego', file: '/sounds/fire.mp3', volume: 0.5, isActive: false },
@@ -12,39 +11,42 @@ const initialSounds: SoundConfig[] = [
 ]
 
 export const useAudioManager = () => {
-    const [sounds, setSounds] = useState<SoundConfig[]>(initialSounds)
-
+    const [sounds, setSounds] = useState(initialSounds)
     const audioRefs = useRef<{ [key in SoundType]?: HTMLAudioElement }>({})
 
+    // Initialize audios only once
     useEffect(() => {
-        sounds.forEach(sound => {
-            if (!audioRefs.current[sound.id]) {
-                const audio = new Audio(sound.file)
-                audio.loop = true
-                audio.preload = 'auto'
-                audioRefs.current[sound.id] = audio
-            }
+        initialSounds.forEach(sound => {
+            const audio = new Audio(sound.file)
+            audio.loop = true
+            audio.preload = 'auto'
+            audioRefs.current[sound.id] = audio
         })
+
         return () => {
             Object.values(audioRefs.current).forEach(audio => {
-                if (audio) {
-                    audio.pause()
-                    audio.currentTime = 0
-                }
+                audio?.pause()
+                audio.currentTime = 0
             })
         }
+    }, [])
+
+    // Volume
+    useEffect(() => {
+        sounds.forEach(({ id, volume }) => {
+            const audio = audioRefs.current[id]
+            if (audio) audio.volume = volume
+        })
     }, [sounds])
 
+    // Play/Pause
     useEffect(() => {
-        sounds.forEach(sound => {
-            const audio = audioRefs.current[sound.id]
+        sounds.forEach(({ id, isActive }) => {
+            const audio = audioRefs.current[id]
             if (!audio) return
-            audio.volume = sound.volume
 
-            if (sound.isActive) {
-                audio.play().catch(error => {
-                    console.error(`Error playing ${sound.id}:`, error)
-                })
+            if (isActive) {
+                audio.play().catch(e => console.error(`Error playing ${id}`, e))
             } else {
                 audio.pause()
             }
@@ -52,30 +54,22 @@ export const useAudioManager = () => {
     }, [sounds])
 
     const pauseAllSounds = () => {
-        Object.values(audioRefs.current).forEach(audio => {
-            if (audio) {
-                audio.pause()
-            }
-        })
+        Object.values(audioRefs.current).forEach(audio => audio?.pause())
     }
 
     const resumeActiveSounds = () => {
-        sounds.forEach(sound => {
-            if (sound.isActive) {
-                const audio = audioRefs.current[sound.id]
-                if (audio) {
-                    audio.play().catch(error => {
-                        console.error(`Error resuming ${sound.id}:`, error)
-                    })
-                }
+        sounds.forEach(({ id, isActive }) => {
+            if (isActive) {
+                const audio = audioRefs.current[id]
+                audio?.play().catch(e => console.error(`Error playing ${id}`, e))
             }
         })
     }
 
     return {
-        pauseAllSounds,
-        resumeActiveSounds,
         sounds,
-        setSounds
+        setSounds,
+        pauseAllSounds,
+        resumeActiveSounds
     }
 }
