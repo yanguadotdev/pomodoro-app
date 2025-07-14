@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { SoundConfig, SoundType } from '@/types'
 
 const initialSounds: SoundConfig[] = [
-    { id: 'rain', name: 'Lluvia', file: '/sounds/rain.wav', volume: 0.5, isActive: false },
+    { id: 'rain', name: 'Lluvia', file: '/sounds/rain.mp3', volume: 0.5, isActive: false },
     { id: 'fire', name: 'Fuego', file: '/sounds/fire.mp3', volume: 0.5, isActive: false },
     { id: 'water', name: 'Agua', file: '/sounds/water.mp3', volume: 0.5, isActive: false },
     { id: 'birds', name: 'Pájaros', file: '/sounds/birds.mp3', volume: 0.5, isActive: false },
