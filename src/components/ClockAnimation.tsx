@@ -2,10 +2,10 @@ import { Pause, Play, RotateCcw } from "lucide-react"
 import type { TimerState } from "../types"
 import { useProgressCalculation } from "../hooks"
 import SpecialButton from "./SpecialButton"
-import { useEffect, useState, lazy, Suspense } from "react"
+import { useEffect, lazy, Suspense } from "react"
 import { AnimatePresence, motion } from "motion/react"
 
-const LazyLottie = lazy(() => import("lottie-react"))
+const CompletedSessionAnimation = lazy(() => import("@/components/CompleteSessionAnimation"))
 
 interface ClockAnimationProps {
     timer: TimerState
@@ -16,17 +16,11 @@ interface ClockAnimationProps {
 
 export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
     const { radius, strokeDasharray, strokeDashoffset } = useProgressCalculation({ timer })
-    const [animationData, setAnimationData] = useState<any | null>(null)
 
     useEffect(() => {
         let timeout: ReturnType<typeof setTimeout>
 
         if (timer.isCompleted) {
-            // ⏳ Import animation of 
-            import("@/assets/lotties/complete-session.json").then((mod) => {
-                setAnimationData(mod.default)
-            })
-
             timeout = setTimeout(() => {
                 resetTimer()
             }, 2000)
@@ -69,18 +63,9 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <AnimatePresence>
                             {timer.isCompleted ? (
-                                <div className="text-center -mt-12">
-                                    <Suspense fallback={null}>
-                                        {animationData && (
-                                            <LazyLottie
-                                                className="size-48"
-                                                animationData={animationData}
-                                                loop={false}
-                                            />
-                                        )}
-                                    </Suspense>
-                                    <p className="text-white text-lg font-semibold -mt-12">¡Completado!</p>
-                                </div>
+                                <Suspense fallback={null}>
+                                    <CompletedSessionAnimation />
+                                </Suspense>
                             ) : (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0 }}
