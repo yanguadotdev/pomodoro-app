@@ -88,6 +88,7 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
 
                                     <div className="flex items-center gap-4">
                                         <SpecialButton
+                                            aria-label={timer.isRunning ? 'Pausar' : 'Reanudar'}
                                             onClick={toggleTimer}
                                             className="bg-green-800 backdrop-blur-xs"
                                             rounded
@@ -100,6 +101,7 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                                         </SpecialButton>
 
                                         <SpecialButton
+                                            aria-label="Reiniciar"
                                             onClick={resetTimer}
                                             className="bg-red-800 backdrop-blur-xs"
                                             rounded
