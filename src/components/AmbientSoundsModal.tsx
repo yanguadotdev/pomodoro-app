@@ -34,7 +34,7 @@ export default function AmbientSoundsModal() {
         return (
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button aria-label="Configuracion de sonidos">
                         <Headphones className="size-7 transition-transform duration-300" />
                     </Button>
                 </DialogTrigger>
@@ -57,7 +57,7 @@ export default function AmbientSoundsModal() {
     return (
         <Drawer open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DrawerTrigger asChild>
-                <Button>
+                <Button aria-label="Configuracion de sonidos">
                     <Headphones className="size-7 transition-transform duration-300" />
                 </Button>
             </DrawerTrigger>

@@ -36,7 +36,7 @@ export default function PomodoroConfig() {
         return (
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button aria-label="Configuración">
                         <SettingsIcon className="size-7 transition-transform duration-300 group-hover:rotate-90" />
                     </Button>
                 </DialogTrigger>
@@ -53,7 +53,7 @@ export default function PomodoroConfig() {
     return (
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-                <Button>
+                <Button aria-label="Configuración">
                     <SettingsIcon className="size-6 transition-transform duration-300" />
                 </Button>
             </DrawerTrigger>

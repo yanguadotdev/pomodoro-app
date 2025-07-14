@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import Lottie from "lottie-react"
 
-const LazyLottie = lazy(() => import("lottie-react"))
 
 export default function CompletedSessionAnimation() {
     const [animationData, setAnimationData] = useState<any | null>(null)
@@ -15,13 +15,11 @@ export default function CompletedSessionAnimation() {
 
     return (
         <div className="text-center -mt-12 size-48">
-            <Suspense fallback={null}>
-                <LazyLottie
-                    className="size-48"
-                    animationData={animationData}
-                    loop={false}
-                />
-            </Suspense>
+            <Lottie
+                className="size-48"
+                animationData={animationData}
+                loop={false}
+            />
             <p className="text-white text-lg font-semibold -mt-12">¡Completado!</p>
         </div>
     )

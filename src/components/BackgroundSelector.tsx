@@ -125,7 +125,7 @@ export default function BackgroundSelector() {
         return (
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button aria-label="Personaliza el fondo">
                         <ImageIcon className="size-6" />
                     </Button>
                 </DialogTrigger>
@@ -145,7 +145,7 @@ export default function BackgroundSelector() {
     return (
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-                <Button>
+                <Button aria-label="Personaliza el fondo">
                     <ImageIcon className="size-6" />
                 </Button>
             </DrawerTrigger>

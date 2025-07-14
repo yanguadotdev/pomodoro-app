@@ -46,7 +46,7 @@ const UIControls = memo(({ showUI, rainEnabled, setRainEnabled }: { showUI: bool
 
                         <div className="absolute bottom-4 right-4 rounded-full">
                             <AbsoluteButton>
-                                <Button onClick={setRainEnabled}>
+                                <Button aria-label="Alterna efecto de lluvia" onClick={setRainEnabled}>
                                     <CloudRain className={`size-5 ${rainEnabled ? 'text-blue-300' : 'text-gray-400'}`} />
                                 </Button>
                             </AbsoluteButton>
