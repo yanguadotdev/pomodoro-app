@@ -14,7 +14,8 @@ import { CloudRain, FlameKindling, Waves, Bird } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import Button from "@/components/Button"
 import { useMediaQuery } from "@/hooks"
-import { useState } from "react"
+import { memo, useState } from "react"
+import type { SoundConfig, SoundType } from "@/types"
 
 const soundIcons = {
     rain: CloudRain,
@@ -83,32 +84,50 @@ function GridSounds() {
     return (
         <div className="grid grid-cols-3 gap-8 gap-y-10 px-4 pb-4">
             {sounds.map((sound) => {
-                const Icon = soundIcons[sound.id]
                 return (
-                    <div key={sound.id} className="flex flex-col items-center relative">
-                        <Label htmlFor={sound.id} className="text-xs font-medium mb-1">{sound.name}</Label>
-                        <Toggle
-                            id={sound.id}
-                            pressed={sound.isActive}
-                            onPressedChange={() => toggleSound(sound.id)}
-                        >
-                            <Icon className="size-6" />
-                        </Toggle>
-                        {
-                            sound.isActive && (
-                                <Slider
-                                    value={[sound.volume]}
-                                    onValueChange={(value) => setVolume(sound.id, value[0])}
-                                    max={1}
-                                    min={0}
-                                    step={0.1}
-                                    className="absolute -bottom-4 inset-x-0 max-w-18 mx-auto"
-                                />
-                            )
-                        }
-                    </div>
+                    <SoundItem
+                        key={sound.id}
+                        sound={sound}
+                        toggleSound={toggleSound}
+                        setVolume={setVolume}
+                    />
                 )
             })}
         </div>
     )
 }
+
+interface SoundItemProps {
+    sound: SoundConfig
+    toggleSound: (soundId: SoundType) => void
+    setVolume: (soundId: SoundType, volume: number) => void
+}
+
+const SoundItem = memo(({ sound, toggleSound, setVolume }: SoundItemProps) => {
+    const Icon = soundIcons[sound.id]
+    return (
+        <div className="flex flex-col items-center relative">
+            <Label htmlFor={sound.id} className="text-xs font-medium mb-1">{sound.name}</Label>
+            <Toggle
+                id={sound.id}
+                pressed={sound.isActive}
+                onPressedChange={() => toggleSound(sound.id)}
+            >
+                <Icon className="size-6" />
+            </Toggle>
+            {
+                sound.isActive && (
+                    <Slider
+                        value={[sound.volume]}
+                        onValueChange={(value) => setVolume(sound.id, value[0])}
+                        max={1}
+                        min={0}
+                        step={0.1}
+                        className="absolute -bottom-4 inset-x-0 max-w-18 mx-auto"
+                    />
+                )
+            }
+        </div>
+    )
+})
+SoundItem.displayName = 'SoundItem'
