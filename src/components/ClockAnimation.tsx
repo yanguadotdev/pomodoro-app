@@ -2,10 +2,10 @@ import { Pause, Play, RotateCcw } from "lucide-react"
 import type { TimerState } from "../types"
 import { useProgressCalculation } from "../hooks"
 import SpecialButton from "./SpecialButton"
-import Lottie from "lottie-react"
-import completeSessionAnimation from "@/assets/lotties/complete-session.json"
-import { useEffect } from "react"
+import { useEffect, useState, lazy, Suspense } from "react"
 import { AnimatePresence, motion } from "motion/react"
+
+const LazyLottie = lazy(() => import("lottie-react"))
 
 interface ClockAnimationProps {
     timer: TimerState
@@ -16,14 +16,22 @@ interface ClockAnimationProps {
 
 export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTimer }: ClockAnimationProps) {
     const { radius, strokeDasharray, strokeDashoffset } = useProgressCalculation({ timer })
+    const [animationData, setAnimationData] = useState<any | null>(null)
 
     useEffect(() => {
         let timeout: ReturnType<typeof setTimeout>
+
         if (timer.isCompleted) {
+            // ⏳ Import animation of 
+            import("@/assets/lotties/complete-session.json").then((mod) => {
+                setAnimationData(mod.default)
+            })
+
             timeout = setTimeout(() => {
                 resetTimer()
             }, 2000)
         }
+
         return () => clearTimeout(timeout)
     }, [timer.isCompleted])
 
@@ -33,7 +41,6 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                 {/* SVG circular clock */}
                 <div className="relative">
                     <svg width="280" height="280" className="transform -rotate-90">
-                        {/* Circle background */}
                         <circle
                             cx="140"
                             cy="140"
@@ -42,8 +49,6 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                             stroke="rgba(255, 255, 255, .25)"
                             strokeWidth="8"
                         />
-
-                        {/* Circle progress */}
                         <circle
                             cx="140"
                             cy="140"
@@ -61,18 +66,19 @@ export default function ClockAnimation({ timer, formatTime, toggleTimer, resetTi
                         />
                     </svg>
 
-                    {/* Central content */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <AnimatePresence>
                             {timer.isCompleted ? (
-                                <div
-                                    className="text-center -mt-12"
-                                >
-                                    <Lottie
-                                        className="size-48"
-                                        animationData={completeSessionAnimation}
-                                        loop={false}
-                                    />
+                                <div className="text-center -mt-12">
+                                    <Suspense fallback={null}>
+                                        {animationData && (
+                                            <LazyLottie
+                                                className="size-48"
+                                                animationData={animationData}
+                                                loop={false}
+                                            />
+                                        )}
+                                    </Suspense>
                                     <p className="text-white text-lg font-semibold -mt-12">¡Completado!</p>
                                 </div>
                             ) : (
