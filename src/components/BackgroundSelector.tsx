@@ -18,7 +18,6 @@ import { useMediaQuery } from "@/hooks"
 import { useConfigBackground } from "@/context/configBackgroundContext"
 import { cn } from "@/lib/utils"
 import Button from "@/components/Button"
-import { motion } from "motion/react"
 import { ImageIcon, Upload, X } from "lucide-react"
 
 export default function BackgroundSelector() {
@@ -49,7 +48,7 @@ export default function BackgroundSelector() {
                 const imageUrl = e.target?.result as string
                 setCustomImage(imageUrl)
                 // Automatically select the uploaded image
-                const newIndex = totalImages
+                const newIndex = customImage ? totalImages - 1 : totalImages
                 setSelectedIndex(newIndex)
             }
             reader.readAsDataURL(file)
@@ -70,13 +69,9 @@ export default function BackgroundSelector() {
                 const isCustomImage = customImage && index === totalImages - 1
 
                 return (
-                    <motion.div
+                    <div
                         key={index}
                         className="relative"
-                        initial={{ opacity: 0, scaleX: 0 }}
-                        animate={{ opacity: 1, scaleX: 1 }}
-                        exit={{ opacity: 0, scaleX: 0 }}
-                        transition={{ duration: 0.3 }}
                     >
                         <button
                             onClick={() => setSelectedIndex(index)}
@@ -102,7 +97,7 @@ export default function BackgroundSelector() {
                                 <X className="size-3" />
                             </button>
                         )}
-                    </motion.div>
+                    </div>
                 )
             })}
 
